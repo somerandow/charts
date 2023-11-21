@@ -1,6 +1,10 @@
 services:
   web:
     enabled: true
+    ports:
+      - name: http
+        port: 6767
+        target: http
 
 # Default values for bazarr.
 # This is a YAML-formatted file.

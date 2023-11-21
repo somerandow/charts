@@ -1,6 +1,12 @@
 # Common chart values
 
 services: []
+#  - example:
+#      type: "ClusterIP"
+#      ports:
+#        - port: 1234
+#          target: 1234
+#          protocol: TCP
 
 
 # Default values for common.
