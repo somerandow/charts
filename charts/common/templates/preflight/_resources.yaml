@@ -1,0 +1,5 @@
+{{/*
+common.preflight.resources serves to load in any includes needed to generate resources from
+any resource templates
+*/}}
+{{- define "common.preflight.resources" -}}

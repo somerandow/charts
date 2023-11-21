@@ -1,0 +1,19 @@
+{{- define "common.service.tpl" -}}
+{{- range $key, $service := .Values.services }}
+  {{- /* Check if service should be enabled */ -}}
+  {{- $serviceEnabled := false -}}
+  {{- if hasKey $service "enabled" -}}
+    {{- $serviceEnabled = $service.enabled -}}
+  {{- end -}}
+  {{- if $serviceEnabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "common.util.resourceName" (dict "extraResourceName" $key) }}
+spec: {}
+{{- end -}}
+{{- end -}}
+{{- end -}}
+{{- define "common.service" -}}
+{{- include "common.util.merge" (append . "common.service.tpl") -}}
+{{- end -}}
