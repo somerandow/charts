@@ -3,3 +3,6 @@ common.preflight.resources serves to load in any includes needed to generate res
 any resource templates
 */}}
 {{- define "common.preflight.resources" -}}
+{{- include "common.resource.configmap" . }}
+{{- include "common.resource.service" . }}
+{{- end -}}

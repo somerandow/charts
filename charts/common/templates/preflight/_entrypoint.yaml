@@ -4,4 +4,5 @@ should include in order to do things like merge values, do basic setup, etc.
 */}}
 {{- define "common.preflight.entrypoint" -}}
 {{- include "common.values.merge" . -}}
+{{- include "common.preflight.resources" . -}}
 {{- end -}}

@@ -1,5 +1,0 @@
-{{- include "common.configmap" (list . "bazarr.configmap") -}}
-{{- define "bazarr.configmap" -}}
-data:
-  foo: "bar"
-{{- end -}}

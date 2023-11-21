@@ -1,10 +1,8 @@
-{{- define "common.configmap.tpl" -}}
+{{- define "common.resource.configmap" -}}
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "common.util.resourceName" . }}
+  name: {{ include "common.util.resourceName" (dict "rootCtx" $ "extraResourceName" "") }}
 data: {}
-{{- end -}}
-{{- define "common.configmap" -}}
-{{- include "common.util.merge" (append . "common.configmap.tpl") -}}
-{{- end -}}
+{{ end }}

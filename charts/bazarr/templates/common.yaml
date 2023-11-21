@@ -1,0 +1,1 @@
+{{- include "common.preflight.entrypoint" . -}}
