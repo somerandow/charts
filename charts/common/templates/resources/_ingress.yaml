@@ -1,0 +1,33 @@
+{{- define "common.resource.ingress" -}}
+{{- range $key, $ingress := .Values.ingresses }}
+  {{- /* Check if ingress should be enabled */ -}}
+  {{- $ingressEnabled := false -}}
+  {{- if hasKey $ingress "enabled" -}}
+    {{- $ingressEnabled = $ingress.enabled -}}
+  {{- end -}}
+  {{- if $ingressEnabled -}}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  # TODO: Make the resourceName allow for nameoverrides, and also account for single-resource cases
+  name: {{ include "common.util.resourceName" (dict "rootCtx" $ "extraResourceName" $key) }}
+  labels: {{ include "common.util.metadata.labels" $ | nindent 4}}
+  # TODO: Template annotations
+  annotations: {}
+spec:
+  ingressClassName: {{ $ingress.className | quote }}
+  tls: {{ $ingress.tls | toYaml | nindent 4 }}
+  rules:
+  {{- range $rule := $ingress.rules}}
+    - host: {{ $rule.host | quote }}
+      http:
+        paths: {{- range $path := $rule.paths }}
+          - path: {{ $path.path | quote }}
+            pathType: {{ $path.pathType }}
+            backend: {{ $path.backend | toYaml | nindent 14}}
+          {{- end -}}
+  {{ end }}
+{{ end }}
+{{- end -}}
+{{- end -}}

@@ -5,4 +5,5 @@ any resource templates
 {{- define "common.preflight.resources" -}}
 {{- include "common.resource.configmap" . }}
 {{- include "common.resource.service" . }}
+{{- include "common.resource.ingress" . }}
 {{- end -}}

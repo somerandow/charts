@@ -1,0 +1,20 @@
+{{/*
+common.util.metadata.labels templates the labels for a resource based on provided values,
+and injects some common extras used by Helm.
+*/}}
+{{- define "common.util.metadata.labels" -}}
+helm.sh/chart: {{ .Chart.Name | quote }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+app.kubernetes.io/managed-by: {{ .Release.Service | quote}}
+{{ include "common.util.metadata.selectorLabels" . }}
+{{- end -}}
+
+{{/*
+common.util.metadata.selectorLabels templates the labels typically used when selecting resources with things like the
+matchLabels: {} conditional
+*/}}
+{{- define "common.util.metadata.selectorLabels" -}}
+{{- /* Use "main" here so that the resourName template will render back the proper name */ -}}
+app.kubernetes.io/name: {{ include "common.util.resourceName" (dict "rootCtx" $ "extraResourceName" "main") | quote }}
+app.kubernetes.io/instance: {{ .Release.Name | quote }}
+{{- end -}}

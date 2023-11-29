@@ -10,7 +10,11 @@
 apiVersion: v1
 kind: Service
 metadata:
+  # TODO: Make the resourceName allow for nameoverrides, and also account for single-resource cases
   name: {{ include "common.util.resourceName" (dict "rootCtx" $ "extraResourceName" $key) }}
+  labels: {{ include "common.util.metadata.labels" $ | nindent 4}}
+  # TODO: Template annotations
+  annotations: {}
 spec:
   type: {{ $service.type | default "ClusterIP"}}
   ports:
@@ -20,6 +24,8 @@ spec:
       protocol: {{ $port.protocol | default "TCP" }}
       name: {{ $port.name }}
     {{- end }}
-{{- end }}
+  selector:
+    matchLabels: {{ include "common.util.metadata.selectorLabels" $ | nindent 6 }}
+{{ end }}
 {{- end -}}
 {{- end -}}

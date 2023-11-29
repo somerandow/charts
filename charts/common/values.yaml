@@ -8,6 +8,10 @@ services: []
 #          target: 1234
 #          protocol: TCP
 
+ingresses: []
+#  - example:
+#      className: example
+
 
 # Default values for common.
 # This is a YAML-formatted file.
