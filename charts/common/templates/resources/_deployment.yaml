@@ -12,12 +12,12 @@ kind: Deployment
 metadata:
   name: {{ include "common.util.resourceName" (dict "rootCtx" $ "extraResourceName" $key) }}
   labels: {{ include "common.util.metadata.labels" $ | nindent 4}}
-  annotations: {{empty $deployment.annotations | ternary (`{}`) ($deployment.annotations | toYaml | nindent 4) }}
+  annotations: {{empty .annotations | ternary (`{}`) (.annotations | toYaml | nindent 4) }}
 spec:
-  revisionHistoryLimit: {{ $deployment.revisionHistoryLimit | default 1 }}
-  replicas: {{ $deployment.replicas | default 1 }}
+  revisionHistoryLimit: {{ .revisionHistoryLimit | default 1 }}
+  replicas: {{ .replicas | default 1 }}
   strategy:
-    type: {{ $deployment.updateStrategy | default "Recreate" }}
+    type: {{ .updateStrategy | default "Recreate" }}
   selector:
     matchLabels: {{ include "common.util.metadata.selectorLabels" $ | nindent 6 }}
   template:
@@ -27,9 +27,61 @@ spec:
       # TODO handle service account creation
       serviceAccountName: default
       automountServiceAccountToken: true
-      securityContext: {{ include "common.security.podContext" . | nindent 8 }}
+      securityContext: {{ not (empty .context) | ternary (include "common.security.podContext" .context | nindent 8) `{}` }}
       dnsPolicy: ClusterFirst
       enableServiceLinks: true
+      containers:
+        {{- range $container := .containers -}}
+        {{- if ge (len $deployment.containers) 1 -}}
+        {{- $key := "main" -}}
+        {{- else -}}
+        {{- $key := .name -}}
+        {{- end }}
+        - name: {{ include "common.util.resourceName" (dict "rootCtx" $ "extraResourceName" $key) }}
+          image: {{ (.image.tag | default "latest") | printf "%s:%s" .image.repository | quote }}
+          imagePullPolicy: {{ .image.pullPolicy | default "IfNotPresent" }}
+          securityContext: {{ not (empty .context) | ternary (include "common.security.containerContext" . | nindent 12) `{}` }}
+          env: {{ not (empty .env) | ternary (.env | toYaml | nindent 12) `[]` }}
+          ports:
+            - name: http
+              containerPort: 6767
+              protocol: TCP
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: media
+              mountPath: /media
+          livenessProbe:
+            tcpSocket:
+              port: 6767
+            initialDelaySeconds: 0
+            failureThreshold: 3
+            timeoutSeconds: 1
+            periodSeconds: 10
+          readinessProbe:
+            tcpSocket:
+              port: 6767
+            initialDelaySeconds: 0
+            failureThreshold: 3
+            timeoutSeconds: 1
+            periodSeconds: 10
+          startupProbe:
+            tcpSocket:
+              port: 6767
+            initialDelaySeconds: 0
+            failureThreshold: 30
+            timeoutSeconds: 1
+            periodSeconds: 5
+          resources: {{ include "common.spec.resources" . | nindent 12 }}
+          {{- end }}
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: bazarr-config
+        - name: media
+          persistentVolumeClaim:
+            claimName: media-local
+
 {{ end }}
 {{- end -}}
 {{- end -}}

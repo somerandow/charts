@@ -1,0 +1,16 @@
+{{/*
+common.spec.resources templates a sensible default for resources to avoid pods being created with empty resource
+constraints
+*/}}
+{{- define "common.spec.resources" -}}
+{{- if empty $.resources -}}
+requests:
+  cpu: 100m
+  memory: 100Mi
+limits:
+  cpu: 200m
+  memory: 200Mi
+{{- else -}}
+{{ $.resources | toYaml }}
+{{- end -}}
+{{- end -}}
