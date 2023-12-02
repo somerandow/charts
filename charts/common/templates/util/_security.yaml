@@ -20,6 +20,13 @@ supplementalGroups: {{ $.extraGids | toYaml | nindent 2 }}
 common.util.security.podContext templates the security context for a deployment based on provided values.
 */}}
 {{- define "common.security.containerContext" -}}
-# TODO implement container securityContext
-{}
+allowPrivilegeEscalation: {{ .allowPrivilegeEscalation | default false }}
+{{ if not (empty .capabilities) }}
+capabilities: {{ .capabilites | toYaml | nindent 2 }}
+{{- else -}}
+capabilities:
+  drop:
+    - ALL
+{{- end }}
+readOnlyRootFilesystem: {{ .readOnlyRoot | default false}}
 {{- end -}}

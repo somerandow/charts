@@ -6,3 +6,34 @@ services:
       - name: http
         port: 8191
         target: http
+deployments:
+  main:
+    enabled: true
+    volumes:
+      tmp:
+        type: emptyDir
+    containers:
+      main:
+        volumeMounts:
+          tmp:
+            path: /tmp
+        image:
+          repository: ghcr.io/flaresolverr/flaresolverr
+        env:
+          - name: TEST_URL
+            value: https://duckduckgo.com
+          - name: TZ
+            value: America/Chicago
+        ports:
+          http:
+            port: 8191
+        probes:
+          liveness:
+            enabled: true
+            port: 8191
+          readiness:
+            enabled: true
+            port: 8191
+          startup:
+            enabled: true
+            port: 8191

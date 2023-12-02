@@ -32,9 +32,9 @@ spec:
       enableServiceLinks: true
       containers: {{- range $key, $container := .containers }}
         - name: {{ include "common.util.resourceName" (dict "rootCtx" $ "extraResourceName" $key) }}
-          image: {{ (.image.tag | default "latest") | printf "%s:%s" .image.repository | quote }}
+          image: {{ (.image.tag | default $.Chart.AppVersion) | printf "%s:%s" .image.repository | quote }}
           imagePullPolicy: {{ .image.pullPolicy | default "IfNotPresent" }}
-          securityContext: {{ not (empty .context) | ternary (include "common.security.containerContext" . | nindent 12) `{}` }}
+          securityContext: {{ not (empty .context) | ternary .context (dict) | include "common.security.containerContext" | nindent 12}}
           env: {{ not (empty .env) | ternary (.env | toYaml | nindent 12) `[]` }}
           ports: {{ not (empty .ports) | ternary (include "common.spec.ports" .ports | nindent 12) `[]` }}
           volumeMounts: {{ not (empty .volumeMounts) | ternary (include "common.spec.volumeMounts" .volumeMounts | trim | nindent 12) `[]` }}
