@@ -10,11 +10,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  # TODO: Make the resourceName allow for nameoverrides, and also account for single-resource cases
   name: {{ include "common.util.resourceName" (dict "rootCtx" $ "extraResourceName" $key) }}
   labels: {{ include "common.util.metadata.labels" $ | nindent 4}}
-  # TODO: Template annotations
-  annotations: {}
+  annotations: {{empty $service.annotations | ternary (`{}`) ($service.annotations | toYaml | nindent 4) }}
 spec:
   type: {{ $service.type | default "ClusterIP"}}
   ports:

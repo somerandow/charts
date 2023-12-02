@@ -22,10 +22,14 @@ If extraResourceName == "main", it will be ignored
 {{- define "common.util.resourceName" -}}
 {{- $rootCtx := .rootCtx -}}
 {{- $extraResourceName := .extraResourceName -}}
-{{- if eq $rootCtx.Release.Name $rootCtx.Chart.Name -}}
-{{- eq $extraResourceName "main" | ternary ($rootCtx.Release.Name) ($extraResourceName | printf "%s-%s" $rootCtx.Release.Name) -}}
+{{- if ne $rootCtx.Values.nameOverride ""}}
+  {{- eq $extraResourceName "main" | ternary ($rootCtx.Values.nameOverride) ($extraResourceName | printf "%s-%s" $rootCtx.Values.nameOverride) -}}
 {{- else -}}
-{{- eq $extraResourceName "main" | ternary ($rootCtx.Release.Name | printf "%s-%s" $rootCtx.Chart.Name | printf "%s-%s" $extraResourceName) ($rootCtx.Release.Name | printf "%s-%s" $rootCtx.Chart.Name) -}}
+  {{- if eq $rootCtx.Release.Name $rootCtx.Chart.Name -}}
+    {{- eq $extraResourceName "main" | ternary ($rootCtx.Release.Name) ($extraResourceName | printf "%s-%s" $rootCtx.Release.Name) -}}
+  {{- else -}}
+    {{- eq $extraResourceName "main" | ternary ($rootCtx.Release.Name | printf "%s-%s" $rootCtx.Chart.Name | printf "%s-%s" $extraResourceName) ($rootCtx.Release.Name | printf "%s-%s" $rootCtx.Chart.Name) -}}
+  {{- end -}}
 {{- end -}}
 {{- end -}}
 

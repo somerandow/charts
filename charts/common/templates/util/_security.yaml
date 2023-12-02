@@ -1,0 +1,22 @@
+{{/*
+common.util.security.podContext templates the security context for a deployment based on provided values.
+*/}}
+{{- define "common.security.podContext" -}}
+{{- if not (empty $.context) -}}
+{{- $ctx := $.context -}}
+{{- if not (empty $ctx.fsGroup) -}}
+fsGroup: {{ $ctx.fsGroup }}
+{{- end }}
+{{- if not (empty $ctx.gid) }}
+runAsGroup: {{ $ctx.gid }}
+{{- end }}
+{{- if not (empty $ctx.uid) }}
+runAsUser: {{ $ctx.uid }}
+{{- end }}
+{{- if not (empty $ctx.extraGids) }}
+supplementalGroups: {{ $ctx.extraGids | toYaml | nindent 2 }}
+{{- end }}
+{{- else -}}
+securityContext: {}
+{{- end -}}
+{{- end -}}

@@ -1,0 +1,8 @@
+nameOverride: ""
+services:
+  main:
+    enabled: true
+    ports:
+      - name: http
+        port: 8191
+        target: http

@@ -1,5 +1,7 @@
 # Common chart values
 
+nameOverride: ""
+
 services: []
 #  - example:
 #      type: "ClusterIP"
@@ -12,6 +14,7 @@ ingresses: []
 #  - example:
 #      className: example
 
+deployments: []
 
 # Default values for common.
 # This is a YAML-formatted file.
@@ -26,8 +29,6 @@ image:
   tag: ""
 
 imagePullSecrets: []
-nameOverride: ""
-fullnameOverride: ""
 
 serviceAccount:
   # Specifies whether a service account should be created

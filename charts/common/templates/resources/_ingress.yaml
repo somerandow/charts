@@ -10,11 +10,9 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  # TODO: Make the resourceName allow for nameoverrides, and also account for single-resource cases
   name: {{ include "common.util.resourceName" (dict "rootCtx" $ "extraResourceName" $key) }}
   labels: {{ include "common.util.metadata.labels" $ | nindent 4}}
-  # TODO: Template annotations
-  annotations: {}
+  annotations: {{empty $ingress.annotations | ternary (`{}`) ($ingress.annotations | toYaml | nindent 4) }}
 spec:
   ingressClassName: {{ $ingress.className | quote }}
   tls: {{ $ingress.tls | toYaml | nindent 4 }}

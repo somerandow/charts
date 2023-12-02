@@ -1,8 +1,17 @@
 {{- define "common.resource.configmap" -}}
+{{- range $key, $configmap := .Values.configmaps }}
+  {{- /* Check if configmap should be enabled */ -}}
+  {{- $configmapEnabled := false -}}
+  {{- if hasKey $configmap "enabled" -}}
+    {{- $configmapEnabled = $configmap.enabled -}}
+  {{- end -}}
+  {{- if $configmapEnabled -}}
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "common.util.resourceName" (dict "rootCtx" $ "extraResourceName" "") }}
+  name: {{ include "common.util.resourceName" (dict "rootCtx" $ "extraResourceName" $key) }}
 data: {}
 {{ end }}
+{{- end -}}
+{{- end -}}

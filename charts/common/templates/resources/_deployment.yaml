@@ -1,0 +1,35 @@
+{{- define "common.resource.deployment" -}}
+{{- range $key, $deployment := .Values.deployments }}
+  {{- /* Check if deployment should be enabled */ -}}
+  {{- $deploymentEnabled := false -}}
+  {{- if hasKey $deployment "enabled" -}}
+    {{- $deploymentEnabled = $deployment.enabled -}}
+  {{- end -}}
+  {{- if $deploymentEnabled -}}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "common.util.resourceName" (dict "rootCtx" $ "extraResourceName" $key) }}
+  labels: {{ include "common.util.metadata.labels" $ | nindent 4}}
+  annotations: {{empty $deployment.annotations | ternary (`{}`) ($deployment.annotations | toYaml | nindent 4) }}
+spec:
+  revisionHistoryLimit: {{ $deployment.revisionHistoryLimit | default 1 }}
+  replicas: {{ $deployment.replicas | default 1 }}
+  strategy:
+    type: {{ $deployment.updateStrategy | default "Recreate" }}
+  selector:
+    matchLabels: {{ include "common.util.metadata.selectorLabels" $ | nindent 6 }}
+  template:
+    metadata:
+      labels: {{ include "common.util.metadata.selectorLabels" $ | nindent 8 }}
+    spec:
+      # TODO handle service account creation
+      serviceAccountName: default
+      automountServiceAccountToken: true
+      securityContext: {{ include "common.security.podContext" . | nindent 8 }}
+      dnsPolicy: ClusterFirst
+      enableServiceLinks: true
+{{ end }}
+{{- end -}}
+{{- end -}}
