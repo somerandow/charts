@@ -1,0 +1,26 @@
+{{- define "common.resource.persistentVolumeClaim" -}}
+{{- range $key, $pvc := .Values.pvcs }}
+  {{- /* Check if pvc should be enabled */ -}}
+  {{- $pvcEnabled := false -}}
+  {{- if hasKey $pvc "enabled" -}}
+    {{- $pvcEnabled = $pvc.enabled -}}
+  {{- end -}}
+  {{- if $pvcEnabled -}}
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ include "common.util.resourceName" (dict "rootCtx" $ "extraResourceName" $key) }}
+  labels: {{ include "common.util.metadata.labels" $ | nindent 4}}
+  annotations: {{empty .annotations | ternary (`{}`) (.annotations | toYaml | nindent 4) }}
+spec:
+  accessModes: {{ not (empty .accessMode) | ternary (list .accessMode) (list "ReadWriteOnce") | toYaml | nindent 4 }}
+  resources:
+    requests:
+      storage: {{ not (empty .size) | ternary .size "1Gi" | quote }}
+{{ if not (empty .storageClass) }}
+  storageClassName: {{ .storageClass }}
+{{- end -}}
+{{ end }}
+{{- end -}}
+{{- end -}}

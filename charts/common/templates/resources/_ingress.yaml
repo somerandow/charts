@@ -12,18 +12,17 @@ kind: Ingress
 metadata:
   name: {{ include "common.util.resourceName" (dict "rootCtx" $ "extraResourceName" $key) }}
   labels: {{ include "common.util.metadata.labels" $ | nindent 4}}
-  annotations: {{empty $ingress.annotations | ternary (`{}`) ($ingress.annotations | toYaml | nindent 4) }}
+  annotations: {{empty .annotations | ternary (`{}`) (.annotations | toYaml | nindent 4) }}
 spec:
-  ingressClassName: {{ $ingress.className | quote }}
-  tls: {{ $ingress.tls | toYaml | nindent 4 }}
-  rules:
-  {{- range $rule := $ingress.rules}}
-    - host: {{ $rule.host | quote }}
+  ingressClassName: {{ .className | quote }}
+  tls: {{ .tls | toYaml | nindent 4 }}
+  rules: {{- range $rule := .rules}}
+    - host: {{ .host | quote }}
       http:
-        paths: {{- range $path := $rule.paths }}
-          - path: {{ $path.path | quote }}
-            pathType: {{ $path.pathType }}
-            backend: {{ $path.backend | toYaml | nindent 14}}
+        paths: {{- range $path := .paths }}
+          - path: {{ .path | quote }}
+            pathType: {{ .pathType }}
+            backend: {{ .backend | toYaml | nindent 14}}
           {{- end -}}
   {{ end }}
 {{ end }}
