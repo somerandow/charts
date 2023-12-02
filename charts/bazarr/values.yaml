@@ -1,20 +1,20 @@
 nameOverride: ""
 services:
   main:
-    enabled: true
+    enabled: false
     ports:
       - name: http
         port: 6767
         target: http
   api:
-    enabled: true
+    enabled: false
     ports:
       - name: api
         port: 6768
         target: api
 ingresses:
   main:
-    enabled: true
+    enabled: false
     labels: {}
     annotations:
       cert-manager.io/cluster-issuer: acme
@@ -45,8 +45,18 @@ deployments:
       uid: 568
       extraGids:
         - 997
+    volumes:
+      config:
+        type: pvc
+      media:
+        type: pvc
+        name: media-local
     containers:
-      - env:
+      test:
+        image:
+          repository: alpine
+      main:
+        env:
           - name: TZ
             value: America/Chicago
         image:
@@ -59,6 +69,25 @@ deployments:
           requests:
             cpu: 25m
             memory: 100Mi
+        ports:
+          http:
+            port: 6767
+        probes:
+          liveness:
+            enabled: true
+            port: 6767
+          readiness:
+            enabled: true
+            port: 6767
+          startup:
+            enabled: true
+            port: 6767
+        volumeMounts:
+          config:
+            path: /config
+          media:
+            path: /media
+
 
 # Default values for bazarr.
 # This is a YAML-formatted file.

@@ -14,3 +14,79 @@ limits:
 {{ $.resources | toYaml }}
 {{- end -}}
 {{- end -}}
+
+{{/*
+common.spec.ports templates port information for containers
+*/}}
+{{- define "common.spec.ports" -}}
+{{- range $k, $v := . -}}
+- name: {{ $k }}
+  containerPort: {{ required "Named ports must have a port number specified" .port }}
+  protocol: {{ .protocol | default "TCP"}}
+{{- end }}
+{{- end -}}
+
+{{/*
+common.spec.probe is used to fill in common values between different probes.
+*/}}
+{{- define "common.spec.internal.probe" -}}
+{{- if eq (.type | default "tcp") "tcp" -}}
+tcpSocket:
+  port: {{ required "TCP probes require a port" .port }}
+{{ end -}}
+initialDelaySeconds: {{ .delay | default 0 }}
+timeoutSeconds: {{ .timeout | default 1 }}
+periodSeconds: {{ .period | default 10}}
+failureThreshold: {{ .failures | default 3 }}
+successThreshold: {{ .successes | default 1 }}
+{{- end -}}
+
+{{/*
+common.spec.probe is used to fill in common values between different probes.
+*/}}
+{{- define "common.spec.probes" -}}
+{{- if and (not (empty .liveness)) (.liveness.enabled | default false) }}
+livenessProbe: {{ include "common.spec.internal.probe" .liveness | trim | nindent 2 }}
+{{- else -}}
+livenessProbe: {}
+{{- end -}}
+{{- if and (not (empty .readiness)) (.readiness.enabled | default false) }}
+readinessProbe: {{ include "common.spec.internal.probe" .readiness | trim | nindent 2 }}
+{{- else -}}
+readinessProbe: {}
+{{- end -}}
+{{- if and (not (empty .startup)) (.startup.enabled | default false) }}
+startupProbe: {{ include "common.spec.internal.probe" .startup | trim | nindent 2 }}
+{{- else -}}
+startupProbe: {}
+{{- end -}}
+{{- end -}}
+
+{{/*
+common.spec.volumeMounts is used to fill in container volumeMounts.
+*/}}
+{{- define "common.spec.volumeMounts" -}}
+{{- range $k, $v := . -}}
+- name: {{ $k }}
+  mountPath: {{ required "volumeMounts must specify a path" .path | quote }}
+  subPath: {{ not (empty .subPath) | ternary (.subPath | quote) ("" | quote) }}
+{{ end }}
+{{- end -}}
+
+{{/*
+common.spec.volumes is used to fill in pod volumes.
+*/}}
+{{- define "common.spec.volumes" -}}
+{{- $rootCtx := .rootCtx -}}
+{{- range $k, $v := .ctx -}}
+{{- $checkType := required "volumes must specify a type" .type -}}
+- name: {{ $k }}
+{{- if eq .type "pvc" }}
+  persistentVolumeClaim:
+    claimName: {{ not (empty .name) | ternary .name (include "common.util.resourceName" (dict "rootCtx" $rootCtx "extraResourceName" $k)) }}
+{{ end }}
+{{- if eq .type "emptyDir"}}
+  emptyDir: {}
+{{ end }}
+{{- end -}}
+{{- end -}}
