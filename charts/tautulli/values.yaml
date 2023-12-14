@@ -1,0 +1,44 @@
+nameOverride: ""
+
+services:
+  main:
+    enabled: true
+    ports:
+      - name: http
+        port: 8181
+        target: http
+
+deployments:
+  main:
+    enabled: true
+    context:
+      fsGroup: 568
+      gid: 568
+      uid: 568
+    containers:
+      main:
+        env:
+          - name: TZ
+            value: America/Chicago
+        image:
+          repository: ghcr.io/onedr0p/tautulli
+        resources:
+          limits:
+            cpu: "2"
+            memory: 1024Mi
+          requests:
+            cpu: 200m
+            memory: 100Mi
+        ports:
+          http:
+            port: 8181
+        probes:
+          liveness:
+            enabled: true
+            port: 8181
+          readiness:
+            enabled: true
+            port: 8181
+          startup:
+            enabled: true
+            port: 8181

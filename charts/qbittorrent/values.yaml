@@ -1,0 +1,53 @@
+nameOverride: ""
+
+services:
+  main:
+    enabled: true
+    ports:
+      - name: http
+        port: 8080
+        target: http
+  bittorrent:
+    enabled: true
+    type: LoadBalancer
+    ports:
+      - name: bittorrent
+        port: 6881
+        target: bittorrent
+
+deployments:
+  main:
+    enabled: true
+    context:
+      fsGroup: 568
+      gid: 568
+      uid: 568
+    containers:
+      main:
+        env:
+          - name: TZ
+            value: America/Chicago
+        image:
+          repository: ghcr.io/onedr0p/qbittorrent
+        resources:
+          limits:
+            cpu: "3"
+            memory: 8Gi
+          requests:
+            cpu: 500m
+            memory: 512Mi
+        ports:
+          http:
+            port: 8080
+          bittorrent:
+            port: 6881
+        probes:
+          liveness:
+            enabled: true
+            port: 8080
+          readiness:
+            enabled: true
+            port: 8080
+          startup:
+            enabled: true
+            port: 8080

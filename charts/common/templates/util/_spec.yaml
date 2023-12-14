@@ -22,8 +22,8 @@ common.spec.ports templates port information for containers
 {{- range $k, $v := . -}}
 - name: {{ $k }}
   containerPort: {{ required "Named ports must have a port number specified" .port }}
-  protocol: {{ .protocol | default "TCP"}}
-{{- end }}
+  protocol: {{ .protocol | default "TCP" }}
+{{ end }}
 {{- end -}}
 
 {{/*
@@ -33,6 +33,9 @@ common.spec.probe is used to fill in common values between different probes.
 {{- if eq (.type | default "tcp") "tcp" -}}
 tcpSocket:
   port: {{ required "TCP probes require a port" .port }}
+{{ else if eq .type "exec" }}
+exec:
+  command: {{ required "Exec probes require a command" .command | toYaml | nindent 4 }}
 {{ end -}}
 initialDelaySeconds: {{ .delay | default 0 }}
 timeoutSeconds: {{ .timeout | default 1 }}
@@ -70,6 +73,13 @@ common.spec.volumeMounts is used to fill in container volumeMounts.
 - name: {{ $k }}
   mountPath: {{ required "volumeMounts must specify a path" .path | quote }}
   subPath: {{ not (empty .subPath) | ternary (.subPath | quote) ("" | quote) }}
+{{ if not (empty .additionalMounts) }}
+{{- range $mount := .additionalMounts -}}
+- name: {{ $k }}
+  mountPath: {{ required "volumeMounts must specify a path" .path | quote }}
+  subPath: {{ not (empty .subPath) | ternary (.subPath | quote) ("" | quote) }}
+{{- end -}}
+{{- end -}}
 {{ end }}
 {{- end -}}
 

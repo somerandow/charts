@@ -1,0 +1,52 @@
+nameOverride: ""
+
+services:
+  main:
+    enabled: true
+    ports:
+      - name: http
+        port: 8686
+        target: http
+
+deployments:
+  main:
+    enabled: true
+    context:
+      fsGroup: 568
+      gid: 568
+      uid: 568
+      extraGids:
+        - 997
+    containers:
+      main:
+        env:
+          - name: TZ
+            value: America/Chicago
+        image:
+          repository: ghcr.io/onedr0p/lidarr
+        resources:
+          limits:
+            cpu: 1500m
+            memory: 1532Mi
+          requests:
+            cpu: 100m
+            memory: 200Mi
+        ports:
+          http:
+            port: 8686
+        probes:
+          liveness:
+            enabled: true
+            type: exec
+            command:
+              - /usr/bin/env
+              - bash
+              - -c
+              - curl --fail localhost:8686/api/v1/system/status?apiKey=`IFS=\> && while read -d
+                \< E C; do if [[ $E = "ApiKey" ]]; then echo $C; fi; done < /config/config.xml`
+          readiness:
+            enabled: true
+            port: 8686
+          startup:
+            enabled: true
+            port: 8686

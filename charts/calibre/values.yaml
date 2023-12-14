@@ -1,0 +1,60 @@
+nameOverride: ""
+
+services:
+  main:
+    enabled: true
+    ports:
+      - name: http
+        port: 8080
+        target: http
+  webserver:
+    enabled: true
+    ports:
+      - name: webserver
+        port: 8081
+        target: webserver
+
+deployments:
+  main:
+    enabled: true
+    context:
+      fsGroup: 568
+      gid: 568
+      uid: 568
+    containers:
+      main:
+        env:
+          - name: PGID
+            value: "568"
+          - name: PUID
+            value: "568"
+          - name: TZ
+            value: America/Chicago
+          - name: UMASK_SET
+            value: "022"
+          - name: SUBFOLDER
+            value: "/calibre/"
+        image:
+          repository: ghcr.io/linuxserver/calibre
+        resources:
+          limits:
+            cpu: 1500m
+            memory: 1532Mi
+          requests:
+            cpu: 200m
+            memory: 100Mi
+        ports:
+          http:
+            port: 8080
+          webserver:
+            port: 8081
+        probes:
+          liveness:
+            enabled: true
+            port: 8080
+          readiness:
+            enabled: true
+            port: 8080
+          startup:
+            enabled: true
+            port: 8080

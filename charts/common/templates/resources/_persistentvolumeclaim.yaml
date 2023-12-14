@@ -18,9 +18,9 @@ spec:
   resources:
     requests:
       storage: {{ not (empty .size) | ternary .size "1Gi" | quote }}
-{{ if not (empty .storageClass) }}
+{{- if not (empty .storageClass) }}
   storageClassName: {{ .storageClass }}
-{{- end -}}
+{{- end }}
 {{ end }}
 {{- end -}}
 {{- end -}}

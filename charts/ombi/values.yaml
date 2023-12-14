@@ -1,0 +1,48 @@
+nameOverride: ""
+
+services:
+  main:
+    enabled: true
+    ports:
+      - name: http
+        port: 3579
+        target: http
+
+deployments:
+  main:
+    enabled: true
+    context:
+      fsGroup: 568
+      gid: 568
+      uid: 568
+    containers:
+      main:
+        env:
+          - name: PGID
+            value: "568"
+          - name: PUID
+            value: "568"
+          - name: TZ
+            value: America/Chicago
+        image:
+          repository: ghcr.io/linuxserver/ombi
+        resources:
+          limits:
+            cpu: "2"
+            memory: 1532Mi
+          requests:
+            cpu: 200m
+            memory: 100Mi
+        ports:
+          http:
+            port: 3579
+        probes:
+          liveness:
+            enabled: true
+            port: 3579
+          readiness:
+            enabled: true
+            port: 3579
+          startup:
+            enabled: true
+            port: 3579
