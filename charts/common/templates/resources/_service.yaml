@@ -22,8 +22,7 @@ spec:
       protocol: {{ $port.protocol | default "TCP" }}
       name: {{ $port.name }}
     {{- end }}
-  selector:
-    matchLabels: {{ include "common.util.metadata.selectorLabels" $ | nindent 6 }}
+  selector: {{ include "common.util.metadata.selectorLabels" $ | nindent 4 }}
 {{ end }}
 {{- end -}}
 {{- end -}}

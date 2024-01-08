@@ -25,5 +25,4 @@ appVersion: "7.1.0"
 dependencies:
   - name: common
     version: 0.3.0
-#    repository: oci://registry.gitlab.com/wojoinc/helm-charts
-    repository: file://../common
+    repository: oci://registry.gitlab.com/wojoinc/helm-charts

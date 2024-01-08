@@ -36,6 +36,7 @@ spec:
           imagePullPolicy: {{ .image.pullPolicy | default "IfNotPresent" }}
           securityContext: {{ not (empty .context) | ternary .context (dict) | include "common.security.containerContext" | nindent 12}}
           env: {{ not (empty .env) | ternary (.env | toYaml | nindent 12) `[]` }}
+          envFrom: {{ not (empty .envFrom) | ternary (.envFrom | toYaml | nindent 12) `[]` }}
           ports: {{ not (empty .ports) | ternary (include "common.spec.ports" .ports | nindent 12) `[]` }}
           volumeMounts: {{ not (empty .volumeMounts) | ternary (include "common.spec.volumeMounts" .volumeMounts | trim | nindent 12) `[]` }}
           {{- if not (empty .probes) -}}
