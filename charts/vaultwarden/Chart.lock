@@ -1,0 +1,9 @@
+dependencies:
+- name: common
+  repository: oci://registry.gitlab.com/wojoinc/helm-charts
+  version: 0.4.1
+- name: postgresql
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 13.3.1
+digest: sha256:54b7a85000cf548b68f1587b5f568b6e2dddda53b44850a01d492287f5b975f2
+generated: "2024-01-21T16:08:52.893236381-06:00"

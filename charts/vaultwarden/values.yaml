@@ -1,0 +1,45 @@
+nameOverride: ""
+
+services:
+  main:
+    enabled: true
+    ports:
+      - name: http
+        port: 1080
+        target: http
+
+deployments:
+  main:
+    enabled: true
+    context:
+      fsGroup: 568
+      gid: 568
+      uid: 568
+    containers:
+      main:
+        context:
+          readOnlyRootFilesystem: true
+        image:
+          repository: docker.io/vaultwarden/server
+        resources:
+          limits:
+            cpu: 500m
+            memory: 256Mi
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        ports:
+          http:
+            port: 1080
+        probes:
+          liveness:
+            enabled: true
+            port: 1080
+          readiness:
+            enabled: true
+            port: 1080
+          startup:
+            enabled: true
+            port: 1080
+postgresql:
+  enabled: false

@@ -1,3 +1,3 @@
 #!/bin/bash
-helm dependency update charts/bazarr
-helm template bazarr charts/bazarr --debug
+helm dependency update charts/$1
+helm template $1 charts/$1 --debug
