@@ -2,17 +2,17 @@
 common.util.security.podContext templates the security context for a deployment based on provided values.
 */}}
 {{- define "common.security.podContext" -}}
-{{- if not (empty $.fsGroup) -}}
-fsGroup: {{ $.fsGroup }}
+{{- if not (empty .fsGroup) -}}
+fsGroup: {{ .fsGroup }}
 {{- end }}
-{{- if not (empty $.gid) }}
-runAsGroup: {{ $.gid }}
+{{- if or (not (empty .gid)) (has (kindOf .gid) (list "int" "int64" "float" "float64")) }}
+runAsGroup: {{ .gid }}
 {{- end }}
-{{- if not (empty $.uid) }}
-runAsUser: {{ $.uid }}
+{{- if or (not (empty .uid)) (has (kindOf .uid) (list "int" "int64" "float" "float64")) }}
+runAsUser: {{ .uid }}
 {{- end }}
-{{- if not (empty $.extraGids) }}
-supplementalGroups: {{ $.extraGids | toYaml | nindent 2 }}
+{{- if not (empty .extraGids) }}
+supplementalGroups: {{ .extraGids | toYaml | nindent 2 }}
 {{- end }}
 {{- end -}}
 

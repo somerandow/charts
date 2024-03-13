@@ -1,0 +1,77 @@
+nameOverride: ""
+
+services:
+  main:
+    enabled: true
+    ports:
+      - name: http
+        port: 32400
+        protocol: TCP
+        target: http
+  gdm:
+    enabled: true
+    ports:
+      - name: gdm1
+        port: 32410
+        target: gdm1
+      - name: gdm2
+        port: 32412
+        target: gdm2
+      - name: gdm3
+        port: 32413
+        target: gdm3
+      - name: gdm4
+        port: 32414
+        target: gdm4
+  lb:
+    enabled: true
+    type: LoadBalancer
+    loadBalancerIP: 10.3.3.0
+    trafficPolicy:
+      external: Local
+      internal: Local
+    ports:
+      - name: http
+        port: 32400
+        protocol: TCP
+        target: http
+deployments:
+  main:
+    enabled: true
+    context:
+      fsGroup: 568
+      gid: 568
+      uid: 568
+      extraGids:
+        - 44
+        - 121
+    containers:
+      main:
+        image:
+          repository: ghcr.io/onedr0p/plex
+        resources: {}
+        ports:
+          http:
+            port: 32400
+          gdm1:
+            port: 32410
+            protocol: UDP
+          gdm2:
+            port: 32412
+            protocol: UDP
+          gdm3:
+            port: 32413
+            protocol: UDP
+          gdm4:
+            port: 32414
+            protocol: UDP
+        probes:
+          liveness:
+            enabled: true
+            port: 32400
+          readiness:
+            enabled: true
+            port: 32400
+          startup:
+            enabled: true
+            port: 32400

@@ -1,0 +1,47 @@
+nameOverride: ""
+
+services:
+  main:
+    enabled: true
+    ports:
+      - name: http
+        port: 8000
+        target: http
+
+deployments:
+  main:
+    enabled: true
+    context:
+      # Need to keep this until I build my own container for this
+      fsGroup: 568
+      uid: 0
+      gid: 0
+    containers:
+      main:
+        context:
+          allowPrivilegeEscalation: true
+          # Again, keeping to support the s6-style of user management that the container uses
+          capabilities:
+            drop: []
+        image:
+          repository: ghcr.io/djdembeck/bragibooks
+        resources:
+          limits:
+            cpu: "1"
+            memory: 1024Mi
+          requests:
+            cpu: 25m
+            memory: 100Mi
+        ports:
+          http:
+            port: 8000
+        probes:
+          liveness:
+            enabled: true
+            port: 8000
+          readiness:
+            enabled: true
+            port: 8000
+          startup:
+            enabled: true
+            port: 8000

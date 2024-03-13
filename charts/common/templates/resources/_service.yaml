@@ -15,6 +15,11 @@ metadata:
   annotations: {{empty $service.annotations | ternary (`{}`) ($service.annotations | toYaml | nindent 4) }}
 spec:
   type: {{ $service.type | default "ClusterIP"}}
+  {{- if eq $service.type "Loadbalancer" }}
+  loadBalancerIP: {{ required "loadBalancerIP is required when .type == Loadbalancer" $service.loadBalancerIP }}
+  {{- end -}}
+  externalTrafficPolicy: {{ $service.trafficPolicy.external | default "Cluster" }}
+  internalTrafficPolicy: {{ $service.trafficPolicy.internal | default "Cluster" }}
   ports:
     {{- range $port := $service.ports}}
     - port: {{ $port.port }}
