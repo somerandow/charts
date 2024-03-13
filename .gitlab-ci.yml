@@ -4,6 +4,10 @@ variables:
   DOCKER_TLS_VERIFY: 1
   DOCKER_CERT_PATH: "$DOCKER_TLS_CERTDIR/client"
 
+stages:
+  - test
+  - release
+
 default:
   image: quay.io/helmpack/chart-testing:latest
   services:
@@ -23,7 +27,6 @@ chart:lint:
     - git fetch
   script:
     - |
-      set -x
       CHANGED_CHARTS=$(ct list-changed --config .gitlab/ct.yaml)
       CT_FLAGS=(--config .gitlab/ct.yaml --lint-conf .gitlab/lint.yaml --helm-repo-extra-args "wojoinc-charts=--username gitlab-ci-token --password ${CI_JOB_TOKEN}")
 
@@ -35,6 +38,10 @@ chart:lint:
       echo "${CHANGED_CHARTS[*]}"
 
       ct lint "${CT_FLAGS[@]}"
+      echo "CHANGED_CHARTS=$CHANGED_CHARTS" >> variables.env
+  artifacts:
+    reports:
+      dotenv: variables.env
   rules:
     - changes:
         paths:
@@ -63,16 +70,11 @@ chart:install:
       kubectl cluster-info --context kind-${CI_PIPELINE_ID}-${K8S_VERSION}
   script:
     - |
-      set -x
-      CHANGED_CHARTS=$(ct list-changed --config .gitlab/ct.yaml)
       CT_FLAGS=(--config .gitlab/ct.yaml --helm-repo-extra-args "wojoinc-charts=--username gitlab-ci-token --password ${CI_JOB_TOKEN}")
 
       if [[ $ALL_CHARTS == "true" ]]; then
         CT_FLAGS+=(--all)
       fi
-
-      echo "Detected changes in charts:"
-      echo "${CHANGED_CHARTS[*]}"
 
       kubectl config set-context kind-${CI_PIPELINE_ID}-${K8S_VERSION}
       ct install "${CT_FLAGS[@]}"
@@ -92,3 +94,36 @@ chart:install:
     - changes:
         paths:
           - charts/*/Chart.yaml
+
+chart:package:
+  stage: release
+  script:
+    - |
+      mkdir -p target/
+      helm package -d target ${CHANGED_CHARTS}
+      helm login oci://registry.gitlab.com/wojoinc/helm-charts -u gitlab-ci-token -p $CI_JOB_TOKEN
+      helm push target/${CHANGED_CHARTS}-* oci://registry.gitlab.com/wojoinc/helm-charts
+  needs:
+    - job: chart:lint
+      artifacts: true
+    - job: chart:install
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+release_job:
+  stage: release
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  script:
+    - echo "running release_job"
+  needs:
+    - job: chart:package
+  release:                                         
+    tag_name: 'v0.$CI_PIPELINE_IID'
+    description: 'v0.$CI_PIPELINE_IID'
+    ref: '$CI_COMMIT_SHA'      
