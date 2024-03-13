@@ -43,7 +43,10 @@ chart:lint:
     reports:
       dotenv: variables.env
   rules:
-    - changes:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
+      changes:
         paths:
           - charts/*/Chart.yaml
 
@@ -91,7 +94,10 @@ chart:install:
   needs:
     - chart:lint
   rules:
-    - changes:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
+      changes:
         paths:
           - charts/*/Chart.yaml
 
@@ -108,22 +114,7 @@ chart:package:
       artifacts: true
     - job: chart:install
   rules:
-    - if: $CI_COMMIT_TAG
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: never
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-
-release_job:
-  stage: release
-  image: registry.gitlab.com/gitlab-org/release-cli:latest
-  rules:
     - if: $CI_COMMIT_TAG
-      when: never
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-  script:
-    - echo "running release_job"
-  needs:
-    - job: chart:package
-  release:                                         
-    tag_name: 'v0.$CI_PIPELINE_IID'
-    description: 'v0.$CI_PIPELINE_IID'
-    ref: '$CI_COMMIT_SHA'      
+      when: always
