@@ -1,0 +1,94 @@
+variables:
+  DOCKER_HOST: tcp://docker:2376
+  DOCKER_TLS_CERTDIR: "/certs"
+  DOCKER_TLS_VERIFY: 1
+  DOCKER_CERT_PATH: "$DOCKER_TLS_CERTDIR/client"
+
+default:
+  image: quay.io/helmpack/chart-testing:latest
+  services:
+    - name: docker:dind
+      # Instead of "docker" use a DNS alias that kind includes in the SAN list
+      # when bootstrapping control-plane cert
+      alias: kubernetes
+
+chart:lint:
+  variables:
+    ALL_CHARTS: ${ALL_CHARTS:-"false"}
+    CLUSTER_NAME: ${CI_PIPELINE_ID}-${K8S_VERSION}
+    GIT_DEPTH: 50
+    GIT_STRATEGY: clone
+  before_script:
+    - git remote -v
+    - git fetch
+  script:
+    - |
+      set -x
+      CHANGED_CHARTS=$(ct list-changed --config .gitlab/ct.yaml)
+      CT_FLAGS=(--config .gitlab/ct.yaml --lint-conf .gitlab/lint.yaml --helm-repo-extra-args "wojoinc-charts=--username gitlab-ci-token --password ${CI_JOB_TOKEN}")
+
+      if [[ $ALL_CHARTS == "true" ]]; then
+        CT_FLAGS+=(--all)
+      fi
+
+      echo "Detected changes in charts:"
+      echo "${CHANGED_CHARTS[*]}"
+
+      ct lint "${CT_FLAGS[@]}"
+  rules:
+    - changes:
+        paths:
+          - charts/*/Chart.yaml
+
+chart:install:
+  variables:
+    ALL_CHARTS: ${ALL_CHARTS:-"false"}
+    CLUSTER_NAME: ${CI_PIPELINE_ID}-${K8S_VERSION}
+    GIT_DEPTH: 50
+    GIT_STRATEGY: clone
+  before_script:
+    - git remote -v
+    - git fetch
+    - |
+      echo "Install packages..."
+      echo "@testing https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
+      apk update
+      apk add kind@testing docker
+    - |
+      echo "Install kind"
+      kind create cluster --config .gitlab/kind-cluster-config.yaml --name "${CI_PIPELINE_ID}-${K8S_VERSION}" --image "kindest/node:v${K8S_VERSION}" --wait 5m
+      sed -i -e "s/0.0.0.0/kubernetes/g" $HOME/.kube/config
+    - |
+      echo "Check kind was installed"
+      kubectl cluster-info --context kind-${CI_PIPELINE_ID}-${K8S_VERSION}
+  script:
+    - |
+      set -x
+      CHANGED_CHARTS=$(ct list-changed --config .gitlab/ct.yaml)
+      CT_FLAGS=(--config .gitlab/ct.yaml --helm-repo-extra-args "wojoinc-charts=--username gitlab-ci-token --password ${CI_JOB_TOKEN}")
+
+      if [[ $ALL_CHARTS == "true" ]]; then
+        CT_FLAGS+=(--all)
+      fi
+
+      echo "Detected changes in charts:"
+      echo "${CHANGED_CHARTS[*]}"
+
+      kubectl config set-context kind-${CI_PIPELINE_ID}-${K8S_VERSION}
+      ct install "${CT_FLAGS[@]}"
+  after_script:
+    - |
+      echo "Deleting kind cluster..."
+      kind delete cluster --name "$CLUSTER_NAME"
+  tags:
+    - docker
+  parallel:
+    matrix:
+      - K8S_VERSION:
+          - 1.27.3
+  needs:
+    - chart:lint
+  rules:
+    - changes:
+        paths:
+          - charts/*/Chart.yaml

@@ -1,0 +1,10 @@
+# https://github.com/helm/chart-testing#configuration
+debug: true
+remote: origin
+target-branch: main
+chart-dirs:
+  - charts
+chart-repos:
+  - bitnami=https://charts.bitnami.com/bitnami
+  - wojoinc-charts=oci://registry.gitlab.com/wojoinc/helm-charts
+helm-extra-args: --timeout 600s
