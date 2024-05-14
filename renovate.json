@@ -3,5 +3,17 @@
   "extends": [
     "config:recommended"
   ],
-  "lockFileMaintenance": { "enabled": true }
+  "lockFileMaintenance": { "enabled": true },
+  "bumpVersion": "patch",
+  "customManagers": [
+    {
+      "description": "Update sonarr Chart.yaml versions",
+      "fileMatch": ["^charts\\/sonarr\\/Chart.yaml$"],
+      "matchStrings": [
+        "appVersion: '(?<currentValue>.*?)'\\s+",
+        "repository: '(?<depName>.*?)'\\s+"
+      ],
+      "datasourceTemplate": "docker"
+    }
+  ]
 }

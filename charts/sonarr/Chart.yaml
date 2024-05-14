@@ -7,6 +7,10 @@ appVersion: "3.0.10"
 maintainers:
   - name: WojoInc
     email: wojoinc@pm.me
+annotations:
+  homelab.wojoinc.xyz/default-images: |
+    - name: sonarr
+      repository: ghcr.io/onedr0p/sonarr
 dependencies:
   - name: common
     version: 0.4.2
