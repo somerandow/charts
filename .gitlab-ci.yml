@@ -39,6 +39,8 @@ chart:lint:
 
       ct lint "${CT_FLAGS[@]}"
       echo "CHANGED_CHARTS=$CHANGED_CHARTS" >> variables.env
+      echo "Printing env file"
+      cat variables.env
   artifacts:
     reports:
       dotenv: variables.env
