@@ -11,10 +11,10 @@
       "description": "Update sonarr Chart.yaml versions",
       "fileMatch": ["^charts\\/sonarr\\/Chart\\.yaml$"],
       "matchStrings": [
-        "appVersion: '(?<currentValue>.*?)'\\s+",
-        "repository: '(?<depName>.*?)'\\s+"
+        "appVersion: '(?<currentValue>.*?)'\\s+"
       ],
-      "datasourceTemplate": "docker"
+      "datasourceTemplate": "docker",
+      "depNameTemplate": "ghcr.io/onedr0p/sonarr"
     }
   ]
 }
