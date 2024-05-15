@@ -26,7 +26,7 @@
           "bash scripts/bump-chart-version.sh '{{{packageFileDir}}}' '{{{isMajor}}}' '{{{isMinor}}}' '{{{isPatch}}}'"
         ],
         "fileFilters": ["**/Chart.yaml"],
-        "executionMode": "update"
+        "executionMode": "branch"
       }
     }
   ]
