@@ -2,15 +2,11 @@ apiVersion: v2
 name: sonarr
 description: A Helm chart for deploying Sonarr
 type: application
-version: 1.0.3
-appVersion: "3.0.10"
+version: 2.0.0
+appVersion: "4.0.4"
 maintainers:
   - name: WojoInc
     email: wojoinc@pm.me
-annotations:
-  homelab.wojoinc.xyz/default-images: |
-    - name: sonarr
-      repository: ghcr.io/onedr0p/sonarr
 dependencies:
   - name: common
     version: 0.4.2
