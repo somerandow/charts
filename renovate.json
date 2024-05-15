@@ -29,8 +29,5 @@
         "executionMode": "update"
       }
     }
-  ],
-  "allowedPostUpgradeCommands": [
-    "^bash scripts/bump-chart-version.sh .*$"
   ]
 }
