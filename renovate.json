@@ -23,9 +23,9 @@
       "matchFileNames": ["**/Chart.yaml"],
       "postUpgradeTasks": {
       "commands": [
-          "date"
+          "bash scripts/bump-chart-version.sh '{{{packageFileDir}}}' '{{{isMajor}}}' '{{{isMinor}}}' '{{{isPatch}}}'"
         ],
-        "executionMode": "branch"
+        "executionMode": "update"
       }
     }
   ]
