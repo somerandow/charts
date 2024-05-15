@@ -25,7 +25,7 @@
       "commands": [
           "bash scripts/bump-chart-version.sh '{{{packageFileDir}}}' '{{{isMajor}}}' '{{{isMinor}}}' '{{{isPatch}}}'"
         ],
-        "executionMode": "update"
+        "executionMode": "branch"
       }
     }
   ]
