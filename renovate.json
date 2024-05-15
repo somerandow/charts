@@ -16,5 +16,21 @@
       "datasourceTemplate": "docker",
       "depNameTemplate": "ghcr.io/onedr0p/sonarr"
     }
+  ],
+  "packageRules": [
+    {
+      "description": "Bump helm chart versions when Chart.yaml is changed",
+      "matchManagers": ["helm-values","helmv3"],
+      "postUpgradeTasks": {
+        "commands": [
+          "bash scripts/bump-chart-version.sh '{{{packageFileDir}}}' '{{{isMajor}}}' '{{{isMinor}}}' '{{{isPatch}}}'"
+        ],
+        "fileFilters": ["**/Chart.yaml"],
+        "executionMode": "update"
+      }
+    }
+  ],
+  "allowedPostUpgradeCommands": [
+    "^bash scripts/bump-chart-version.sh .*$"
   ]
 }
