@@ -20,7 +20,7 @@
   "packageRules": [
     {
       "description": "Bump helm chart versions when Chart.yaml is changed",
-      "matchManagers": ["helm-values","helmv3"],
+      "matchFileNames": ["**/Chart.yaml"],
       "postUpgradeTasks": {
         "commands": [
           "bash scripts/bump-chart-version.sh '{{{packageFileDir}}}' '{{{isMajor}}}' '{{{isMinor}}}' '{{{isPatch}}}'"
