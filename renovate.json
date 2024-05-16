@@ -8,13 +8,23 @@
   "customManagers": [
     {
       "customType": "regex",
-      "description": "Update sonarr Chart.yaml versions",
+      "description": "Update sonarr Chart.yaml version",
       "fileMatch": ["^charts\\/sonarr\\/Chart\\.yaml$"],
       "matchStrings": [
         "appVersion: \"(?<currentValue>.*?)\"\\s+"
       ],
       "datasourceTemplate": "docker",
       "depNameTemplate": "ghcr.io/onedr0p/sonarr"
+    },
+    {
+      "customType": "regex",
+      "description": "Update radarr Chart.yaml version",
+      "fileMatch": ["^charts\\/radarr\\/Chart\\.yaml$"],
+      "matchStrings": [
+        "appVersion: \"(?<currentValue>.*?)\"\\s+"
+      ],
+      "datasourceTemplate": "docker",
+      "depNameTemplate": "ghcr.io/onedr0p/radarr"
     }
   ],
   "packageRules": [
