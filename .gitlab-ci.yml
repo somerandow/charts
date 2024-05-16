@@ -114,8 +114,9 @@ chart:package:
     - |
       chart="charts/$(echo $CI_COMMIT_TAG | cut -d '-' -f 1)"
       mkdir -p target/
-      helm package -d target $chart
       helm login oci://registry.gitlab.com/wojoinc/helm-charts -u gitlab-ci-token -p $CI_JOB_TOKEN
+      helm dependency update $chart
+      helm package -d target $chart
       helm push target/* oci://registry.gitlab.com/wojoinc/helm-charts
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
