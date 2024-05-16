@@ -114,7 +114,7 @@ chart:package:
     - |
       chart="charts/$(echo $CI_COMMIT_TAG | cut -d '-' -f 1)"
       mkdir -p target/
-      helm registry login oci://registry.gitlab.com/wojoinc/helm-charts -u gitlab-ci-token -p $GIT_PASSWORD
+      helm registry login registry.gitlab.com/wojoinc/helm-charts -u gitlab-ci-token -p $GIT_PASSWORD
       helm dependency update $chart
       helm package -d target $chart
       helm push target/* oci://registry.gitlab.com/wojoinc/helm-charts
