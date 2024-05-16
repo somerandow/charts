@@ -1,9 +1,9 @@
 dependencies:
 - name: common
   repository: oci://registry.gitlab.com/wojoinc/helm-charts
-  version: 0.4.1
+  version: 0.4.2
 - name: mysql
   repository: https://charts.bitnami.com/bitnami
   version: 9.16.1
-digest: sha256:036417ae19b028aac19d6402c1b561b9d6446865edd6a2bde7a37499b2e68857
-generated: "2024-01-07T11:22:48.868989979-06:00"
+digest: sha256:1c85bd50ae70308aa2e74e5488c77a7a6e93db624db6dfbda75c546628f67b10
+generated: "2024-05-16T14:54:33.688808629Z"
