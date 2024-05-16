@@ -136,6 +136,9 @@ create_tag:
     - git fetch
   script:
     - |
+      git config user.name "Chart Tagger"
+      git config user.email "chart-tag@wojoinc.xyz"
+      git remote set-url --push origin "https://chart-tag:$GIT_PASSWORD@gitlab.com/WojoInc/helm-charts.git"
       CHANGED_CHARTS=$(ct list-changed --since "HEAD~1" --config .gitlab/ct.yaml)
       echo "Detected changes in charts:"
       echo "${CHANGED_CHARTS[*]}"
