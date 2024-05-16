@@ -25,6 +25,16 @@
       ],
       "datasourceTemplate": "docker",
       "depNameTemplate": "ghcr.io/onedr0p/radarr"
+    },
+    {
+      "customType": "regex",
+      "description": "Update lidarr Chart.yaml version",
+      "fileMatch": ["^charts\\/lidarr\\/Chart\\.yaml$"],
+      "matchStrings": [
+        "appVersion: \"(?<currentValue>.*?)\"\\s+"
+      ],
+      "datasourceTemplate": "docker",
+      "depNameTemplate": "ghcr.io/onedr0p/lidarr"
     }
   ],
   "packageRules": [
