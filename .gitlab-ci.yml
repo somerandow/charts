@@ -117,10 +117,6 @@ chart:package:
       helm package -d target $chart
       helm login oci://registry.gitlab.com/wojoinc/helm-charts -u gitlab-ci-token -p $CI_JOB_TOKEN
       helm push target/* oci://registry.gitlab.com/wojoinc/helm-charts
-  needs:
-    - job: chart:lint
-      artifacts: true
-    - job: chart:install
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: never
