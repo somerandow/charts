@@ -33,7 +33,7 @@
       "matchFileNames": ["**/Chart.yaml"],
       "postUpgradeTasks": {
       "commands": [
-          "bash scripts/bump-chart-version.sh '{{{packageFileDir}}}' '{{{isMajor}}}' '{{{isMinor}}}' '{{{isPatch}}}'"
+          "bash scripts/bump-chart-version.sh '{{{packageFileDir}}}' '{{{isMajor}}}' '{{{isPatch}}}'"
         ],
         "executionMode": "branch"
       }

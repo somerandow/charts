@@ -7,8 +7,7 @@ set -euo pipefail
 
 parent_dir="$1"
 is_major="$2"
-is_minor="$3"
-is_patch="$4"
+is_patch="$3"
 
 version=$(grep "^version:" "${parent_dir}/Chart.yaml" | awk '{print $2}')
 if [[ ! $version ]]; then
@@ -28,7 +27,9 @@ if [[ "$is_major" = 'true' ]]; then
 fi
 
 # Bump minor version
-if [[ "$is_minor" = 'true' ]]; then
+# isMinor is not a template variable available from Renovate. SO:
+# If not major or patch, assume minor
+if [[ ("$is_major" != 'true') && ("$is_patch" != 'true') ]]; then
   minor=$(( minor + 1 ))
   patch=0
 fi
