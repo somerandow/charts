@@ -48,8 +48,8 @@
     },
     {
       "customType": "regex",
-      "description": "Update prowlarr Chart.yaml version",
-      "fileMatch": ["^charts\\/prowlarr\\/Chart\\.yaml$"],
+      "description": "Update qbittorrent Chart.yaml version",
+      "fileMatch": ["^charts\\/qbittorrent\\/Chart\\.yaml$"],
       "matchStrings": [
         "appVersion: \"(?<currentValue>.*?)\"\\s+"
       ],
