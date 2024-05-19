@@ -74,7 +74,7 @@
         "appVersion: \"(?<currentValue>.*?)\"\\s+"
       ],
       "datasourceTemplate": "docker",
-      "depNameTemplate": "ghcr.io/solidnerd/bookstack"
+      "depNameTemplate": "docker.io/solidnerd/bookstack"
     },
     {
       "customType": "regex",
@@ -134,7 +134,7 @@
         "appVersion: \"(?<currentValue>.*?)\"\\s+"
       ],
       "datasourceTemplate": "docker",
-      "depNameTemplate": "ghcr.io/onedr0p/unpackerr"
+      "depNameTemplate": "docker.io/golift/unpackerr"
     },
     {
       "customType": "regex",
@@ -144,7 +144,7 @@
         "appVersion: \"(?<currentValue>.*?)\"\\s+"
       ],
       "datasourceTemplate": "docker",
-      "depNameTemplate": "ghcr.io/vaultwarden/server"
+      "depNameTemplate": "docker.io/vaultwarden/server"
     }
   ],
   "packageRules": [

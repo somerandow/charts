@@ -16,7 +16,7 @@ deployments:
               - ALL
           readOnlyRootFilesystem: true
         image:
-          repository: ghcr.io/onedr0p/unpackerr
+          repository: docker.io/golift/unpackerr
         resources:
           limits:
             cpu: 500m
