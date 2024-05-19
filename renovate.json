@@ -8,6 +8,16 @@
   "customManagers": [
     {
       "customType": "regex",
+      "description": "Update bazarr Chart.yaml version",
+      "fileMatch": ["^charts\\/bazarr\\/Chart\\.yaml$"],
+      "matchStrings": [
+        "appVersion: \"(?<currentValue>.*?)\"\\s+"
+      ],
+      "datasourceTemplate": "docker",
+      "depNameTemplate": "ghcr.io/onedr0p/bazarr"
+    },
+    {
+      "customType": "regex",
       "description": "Update sonarr Chart.yaml version",
       "fileMatch": ["^charts\\/sonarr\\/Chart\\.yaml$"],
       "matchStrings": [
@@ -35,6 +45,106 @@
       ],
       "datasourceTemplate": "docker",
       "depNameTemplate": "ghcr.io/onedr0p/lidarr"
+    },
+    {
+      "customType": "regex",
+      "description": "Update prowlarr Chart.yaml version",
+      "fileMatch": ["^charts\\/prowlarr\\/Chart\\.yaml$"],
+      "matchStrings": [
+        "appVersion: \"(?<currentValue>.*?)\"\\s+"
+      ],
+      "datasourceTemplate": "docker",
+      "depNameTemplate": "ghcr.io/onedr0p/qbittorrent"
+    },
+    {
+      "customType": "regex",
+      "description": "Update ombi Chart.yaml version",
+      "fileMatch": ["^charts\\/ombi\\/Chart\\.yaml$"],
+      "matchStrings": [
+        "appVersion: \"(?<currentValue>.*?)\"\\s+"
+      ],
+      "datasourceTemplate": "docker",
+      "depNameTemplate": "ghcr.io/flaresolverr/flaresolverr"
+    },
+    {
+      "customType": "regex",
+      "description": "Update bookstack Chart.yaml version",
+      "fileMatch": ["^charts\\/bookstack\\/Chart\\.yaml$"],
+      "matchStrings": [
+        "appVersion: \"(?<currentValue>.*?)\"\\s+"
+      ],
+      "datasourceTemplate": "docker",
+      "depNameTemplate": "ghcr.io/solidnerd/bookstack"
+    },
+    {
+      "customType": "regex",
+      "description": "Update ombi Chart.yaml version",
+      "fileMatch": ["^charts\\/ombi\\/Chart\\.yaml$"],
+      "matchStrings": [
+        "appVersion: \"(?<currentValue>.*?)\"\\s+"
+      ],
+      "datasourceTemplate": "docker",
+      "depNameTemplate": "ghcr.io/linuxserver/ombi"
+    },
+    {
+      "customType": "regex",
+      "description": "Update plex Chart.yaml version",
+      "fileMatch": ["^charts\\/plex\\/Chart\\.yaml$"],
+      "matchStrings": [
+        "appVersion: \"(?<currentValue>.*?)\"\\s+"
+      ],
+      "datasourceTemplate": "docker",
+      "depNameTemplate": "ghcr.io/onedr0p/plex"
+    },
+    {
+      "customType": "regex",
+      "description": "Update prowlarr Chart.yaml version",
+      "fileMatch": ["^charts\\/prowlarr\\/Chart\\.yaml$"],
+      "matchStrings": [
+        "appVersion: \"(?<currentValue>.*?)\"\\s+"
+      ],
+      "datasourceTemplate": "docker",
+      "depNameTemplate": "ghcr.io/onedr0p/prowlarr"
+    },
+    {
+      "customType": "regex",
+      "description": "Update readarr Chart.yaml version",
+      "fileMatch": ["^charts\\/readarr\\/Chart\\.yaml$"],
+      "matchStrings": [
+        "appVersion: \"(?<currentValue>.*?)\"\\s+"
+      ],
+      "datasourceTemplate": "docker",
+      "depNameTemplate": "ghcr.io/onedr0p/readarr-develop"
+    },
+    {
+      "customType": "regex",
+      "description": "Update tautulli Chart.yaml version",
+      "fileMatch": ["^charts\\/tautulli\\/Chart\\.yaml$"],
+      "matchStrings": [
+        "appVersion: \"(?<currentValue>.*?)\"\\s+"
+      ],
+      "datasourceTemplate": "docker",
+      "depNameTemplate": "ghcr.io/onedr0p/tautulli"
+    },
+    {
+      "customType": "regex",
+      "description": "Update unpackerr Chart.yaml version",
+      "fileMatch": ["^charts\\/unpackerr\\/Chart\\.yaml$"],
+      "matchStrings": [
+        "appVersion: \"(?<currentValue>.*?)\"\\s+"
+      ],
+      "datasourceTemplate": "docker",
+      "depNameTemplate": "ghcr.io/onedr0p/unpackerr"
+    },
+    {
+      "customType": "regex",
+      "description": "Update vaultwarden Chart.yaml version",
+      "fileMatch": ["^charts\\/vaultwarden\\/Chart\\.yaml$"],
+      "matchStrings": [
+        "appVersion: \"(?<currentValue>.*?)\"\\s+"
+      ],
+      "datasourceTemplate": "docker",
+      "depNameTemplate": "ghcr.io/vaultwarden/server"
     }
   ],
   "packageRules": [

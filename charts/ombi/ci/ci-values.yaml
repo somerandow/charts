@@ -1,0 +1,10 @@
+deployments:
+  main:
+    volumes:
+      config:
+        type: emptyDir
+    containers:
+      main:
+        volumeMounts:
+          config:
+            path: "/config"
