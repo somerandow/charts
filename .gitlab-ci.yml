@@ -136,9 +136,7 @@ chart:install:
       echo -e "{\"role\": \"gitlab-gitlab-runner\", \"jwt\": \"$HOMELAB_VAULT_JWT\"}" > payload.json
       export VAULT_TOKEN=$(curl -k --data @payload.json "$VAULT_ADDR/v1/auth/gitlab/login" | jq -r .auth.client_token)
       echo '{"ttl": "1h"}' > payload.json
-      export SA_TOKEN="$(curl -kvvv -H "X-Vault-Token: $VAULT_TOKEN" --data @payload.json "$VAULT_ADDR/v1/$CLUSTER_NAME/creds/gitlab-runner" | jq -r .data.service_account_token)"
-
-    - |
+      export SA_TOKEN="$(curl -k -H "X-Vault-Token: $VAULT_TOKEN" --data @payload.json "$VAULT_ADDR/v1/$CLUSTER_NAME/creds/gitlab-runner" | jq -r .data.service_account_token)"
       echo "Setup kubectl context..."
       mkdir -p $CI_PROJECT_DIR/.kube
       kubectl config set-credentials $CLUSTER_NAME/$SERVICE_ACCOUNT --token=$SA_TOKEN --kubeconfig=$CI_PROJECT_DIR/.kube/config
@@ -147,7 +145,6 @@ chart:install:
       kubectl config use-context $CLUSTER_NAME/$NAMESPACE/$SERVICE_ACCOUNT --kubeconfig=$CI_PROJECT_DIR/.kube/config
     - |
       echo "Check cluster access..."
-      cat $CI_PROJECT_DIR/.kube/config
       KUBECONFIG=$CI_PROJECT_DIR/.kube/config kubectl cluster-info --context $CLUSTER_NAME/$NAMESPACE/$SERVICE_ACCOUNT
   script:
     - |
