@@ -130,6 +130,10 @@ chart:install:
       echo "Install packages..."
       apk update
       apk add jq
+      curl -fSSLo vault.zip https://releases.hashicorp.com/vault/1.16.2/vault_1.16.2_linux_amd64.zip
+      unzip vault.zip
+      chmod +x vault
+      mv vault /usr/bin
     - |
       echo "Get K8s service account token"
       export VAULT_TOKEN=$(vault write -field=token auth/gitlab/login role=gitlab-gitlab-runner jwt=$HOMELAB_VAULT_JWT)
