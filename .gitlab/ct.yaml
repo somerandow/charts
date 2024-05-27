@@ -8,3 +8,4 @@ chart-repos:
   - bitnami=https://charts.bitnami.com/bitnami
   - wojoinc-charts=oci://registry.gitlab.com/wojoinc/helm-charts
 helm-extra-args: --timeout 600s
+namespace: gitlab-runner
