@@ -119,7 +119,7 @@ chart:install:
     NAMESPACE: "gitlab-runner"
     GIT_DEPTH: 50
     GIT_STRATEGY: clone
-    VAULT_ADDR: "https://vault.wojoinc.xyz"
+    VAULT_ADDR: "https://vault.vault:8200"
   id_tokens:
     HOMELAB_VAULT_JWT:
       aud: "vault://homelab.wojoinc.xyz"
@@ -132,12 +132,11 @@ chart:install:
       apk update
       apk add jq
     - |
-      set +x
       echo "Get K8s service account token"
       echo -e "{\"role\": \"gitlab-gitlab-runner\", \"jwt\": \"$HOMELAB_VAULT_JWT\"}" > payload.json
-      export VAULT_TOKEN=$(curl --request POST --data @payload.json $VAULT_ADDR/v1/auth/gitlab/login  jwt=$HOMELAB_VAULT_JWT)
+      export VAULT_TOKEN=$(curl -k --request POST --data @payload.json $VAULT_ADDR/v1/auth/gitlab/login  jwt=$HOMELAB_VAULT_JWT)
       echo '{"ttl": "1h"}' > payload.json
-      export SA_TOKEN="$(curl --request POST -H "X-Vault-Token:$VAULT_TOKEN" --data @payload.json $VAULT_ADDR/v1/$CLUSTER_NAME/creds/gitlab-runner | jq -r .data.service_account_token)"
+      export SA_TOKEN="$(curl -k --request POST -H "X-Vault-Token:$VAULT_TOKEN" --data @payload.json $VAULT_ADDR/v1/$CLUSTER_NAME/creds/gitlab-runner | jq -r .data.service_account_token)"
 
     - |
       echo "Setup kubectl context..."
