@@ -139,7 +139,7 @@ chart:install:
       echo "Setup kubectl context..."
       mkdir -p $CI_PROJECT_DIR/.kube
       kubectl config set-credentials $CLUSTER_NAME/$SERVICE_ACCOUNT --token=$SA_TOKEN --kubeconfig=$CI_PROJECT_DIR/.kube/config
-      kubectl config set-cluster $CLUSTER_NAME --certificate-authority=$CI_PROJECT_DIR/ca.crt --server=$CLUSTER_API --kubeconfig=$CI_PROJECT_DIR/.kube/config
+      kubectl config set-cluster $CLUSTER_NAME --insecure-skip-tls-verify=true --server=$CLUSTER_API --kubeconfig=$CI_PROJECT_DIR/.kube/config
       kubectl config set-context $CLUSTER_NAME/$NAMESPACE/$SERVICE_ACCOUNT --user=$CLUSTER_NAME/$SERVICE_ACCOUNT --namespace=$NAMESPACE --cluster=$CLUSTER_NAME --kubeconfig=$CI_PROJECT_DIR/.kube/config
       kubectl config use-context $CLUSTER_NAME/$NAMESPACE/$SERVICE_ACCOUNT --kubeconfig=$CI_PROJECT_DIR/.kube/config
     - |
