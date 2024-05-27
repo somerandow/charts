@@ -158,11 +158,6 @@ chart:install:
       ct install "${CT_FLAGS[@]}"
   tags:
     - homelab
-  parallel:
-    matrix:
-      - K8S_VERSION:
-          - 1.27.3
-          - 1.29.4
   needs:
     - chart:lint
   rules:

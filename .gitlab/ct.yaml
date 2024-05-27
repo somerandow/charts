@@ -9,3 +9,4 @@ chart-repos:
   - wojoinc-charts=oci://registry.gitlab.com/wojoinc/helm-charts
 helm-extra-args: --timeout 600s
 namespace: gitlab-runner
+release-label: app.kubernetes.io/instance
