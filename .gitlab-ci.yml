@@ -140,7 +140,7 @@ chart:install:
       echo -e "{\"role\": \"gitlab-gitlab-runner\", \"jwt\": \"$HOMELAB_VAULT_JWT\"}" > payload.json
       export VAULT_TOKEN=$(curl --request POST --data @payload.json $VAULT_ADDR/v1/auth/gitlab/login  jwt=$HOMELAB_VAULT_JWT)
       echo '{"ttl": "1h"}' > payload.json
-      export SA_TOKEN="$(curl --request POST --data @payload.json $VAULT_ADDR/v1/$CLUSTER_NAME/creds/gitlab-runner | jq -r .data.service_account_token)"
+      export SA_TOKEN="$(curl --request POST -H "X-Vault-Token:$VAULT_TOKEN" --data @payload.json $VAULT_ADDR/v1/$CLUSTER_NAME/creds/gitlab-runner | jq -r .data.service_account_token)"
 
     - |
       echo "Setup kubectl context..."
