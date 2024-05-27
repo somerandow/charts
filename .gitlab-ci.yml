@@ -147,6 +147,7 @@ chart:install:
       kubectl config use-context $CLUSTER_NAME/$NAMESPACE/$SERVICE_ACCOUNT --kubeconfig=$CI_PROJECT_DIR/.kube/config
     - |
       echo "Check cluster access..."
+      cat $CI_PROJECT_DIR/.kube/config
       KUBECONFIG=$CI_PROJECT_DIR/.kube/config kubectl cluster-info --context $CLUSTER_NAME/$NAMESPACE/$SERVICE_ACCOUNT
   script:
     - |
