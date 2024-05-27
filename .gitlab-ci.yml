@@ -137,6 +137,7 @@ chart:install:
       export VAULT_TOKEN=$(curl -k --data @payload.json "$VAULT_ADDR/v1/auth/gitlab/login" | jq -r .auth.client_token)
       echo '{"ttl": "1h"}' > payload.json
       export SA_TOKEN="$(curl -k -H "X-Vault-Token: $VAULT_TOKEN" --data @payload.json "$VAULT_ADDR/v1/$CLUSTER_NAME/creds/gitlab-runner" | jq -r .data.service_account_token)"
+      cat $SA_TOKEN
       echo "Setup kubectl context..."
       mkdir -p $CI_PROJECT_DIR/.kube
       kubectl config set-credentials $CLUSTER_NAME/$SERVICE_ACCOUNT --token=$SA_TOKEN --kubeconfig=$CI_PROJECT_DIR/.kube/config
