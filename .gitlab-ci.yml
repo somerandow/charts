@@ -134,7 +134,7 @@ chart:install:
     - |
       echo "Get K8s service account token"
       echo -e "{\"role\": \"gitlab-gitlab-runner\", \"jwt\": \"$HOMELAB_VAULT_JWT\"}" > payload.json
-      export VAULT_TOKEN=$(curl -kvvv --request POST --data @payload.json "$VAULT_ADDR/v1/auth/gitlab/login")
+      export VAULT_TOKEN=$(curl -kvvv --request POST --data @payload.json "$VAULT_ADDR/v1/auth/gitlab/login" | jq -r .data.client_token)
       echo '{"ttl": "1h"}' > payload.json
       export SA_TOKEN="$(curl -kvvv --request POST -H "X-Vault-Token:$VAULT_TOKEN" --data @payload.json "$VAULT_ADDR/v1/$CLUSTER_NAME/creds/gitlab-runner" | jq -r .data.service_account_token)"
 
