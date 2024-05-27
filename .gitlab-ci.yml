@@ -51,53 +51,118 @@ chart:lint:
         paths:
           - charts/*/Chart.yaml
 
+# chart:install:
+#   variables:
+#     ALL_CHARTS: ${ALL_CHARTS:-"false"}
+#     CLUSTER_NAME: ${CI_PIPELINE_ID}-${K8S_VERSION}
+#     GIT_DEPTH: 50
+#     GIT_STRATEGY: clone
+#   before_script:
+#     - git remote -v
+#     - git fetch
+#     - |
+#       echo "Install packages..."
+#       echo "@testing https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
+#       apk update
+#       apk add kind@testing docker
+#     - |
+#       echo "Install kind"
+#       kind create cluster --config .gitlab/kind-cluster-config.yaml --name "${CI_PIPELINE_ID}-${K8S_VERSION}" --image "kindest/node:v${K8S_VERSION}" --wait 5m
+#       sed -i -e "s/0.0.0.0/kubernetes/g" $HOME/.kube/config
+#     - |
+#       echo "Check kind was installed"
+#       kubectl cluster-info --context kind-${CI_PIPELINE_ID}-${K8S_VERSION}
+#   script:
+#     - |
+#       CT_FLAGS=(--config .gitlab/ct.yaml --helm-repo-extra-args "wojoinc-charts=--username gitlab-ci-token --password ${CI_JOB_TOKEN}")
+
+#       if [[ $ALL_CHARTS == "true" ]]; then
+#         CT_FLAGS+=(--all)
+#       fi
+
+#       kubectl config set-context kind-${CI_PIPELINE_ID}-${K8S_VERSION}
+#       ct install "${CT_FLAGS[@]}"
+#   after_script:
+#     - |
+#       echo "Deleting kind cluster..."
+#       kind delete cluster --name "$CLUSTER_NAME"
+#   tags:
+#     - gitlab-org-docker
+#   parallel:
+#     matrix:
+#       - K8S_VERSION:
+#           - 1.27.3
+#           - 1.29.4
+#   services:
+#     - name: docker:dind
+#       # Instead of "docker" use a DNS alias that kind includes in the SAN list
+#       # when bootstrapping control-plane cert
+#       alias: kubernetes
+#   needs:
+#     - chart:lint
+#   rules:
+#     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+#       when: never
+#     - if: $CI_COMMIT_TAG
+#       when: never
+#     - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
+#       changes:
+#         paths:
+#           - charts/*/Chart.yaml
+
 chart:install:
   variables:
     ALL_CHARTS: ${ALL_CHARTS:-"false"}
-    CLUSTER_NAME: ${CI_PIPELINE_ID}-${K8S_VERSION}
+    CLUSTER_NAME: "homelab"
+    SERVICE_ACCOUNT: "gitlab-runner"
+    CLUSTER_API: "https://10.2.0.1:443"
+    NAMESPACE: "gitlab-runner"
     GIT_DEPTH: 50
     GIT_STRATEGY: clone
+  id_tokens:
+    HOMELAB_VAULT_JWT:
+      aud: "vault://homelab.wojoinc.xyz"
+    
   before_script:
     - git remote -v
     - git fetch
     - |
       echo "Install packages..."
-      echo "@testing https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
       apk update
-      apk add kind@testing docker
+      apk add jq
     - |
-      echo "Install kind"
-      kind create cluster --config .gitlab/kind-cluster-config.yaml --name "${CI_PIPELINE_ID}-${K8S_VERSION}" --image "kindest/node:v${K8S_VERSION}" --wait 5m
-      sed -i -e "s/0.0.0.0/kubernetes/g" $HOME/.kube/config
+      echo "Get K8s service account token"
+      export VAULT_TOKEN=$(vault write -field=token auth/gitlab/login role=gitlab-gitlab-runner jwt=$HOMELAB_VAULT_JWT)
+      export SA_TOKEN="$(vault write -format=json $CLUSTER_NAME/creds/gitlab-runner ttl="1h" kubernetes_namespace=$NAMESPACE | jq -r .data.service_account_token)"
+
     - |
-      echo "Check kind was installed"
-      kubectl cluster-info --context kind-${CI_PIPELINE_ID}-${K8S_VERSION}
+      echo "Setup kubectl context..."
+      mkdir -p $CI_PROJECT_DIR/.kube/config
+      kubectl config set-credentials $CLUSTER_NAME/$SERVICE_ACCOUNT --token=$SA_TOKEN --kubeconfig=$CI_PROJECT_DIR/.kube/config
+      kubectl config set-cluster $CLUSTER_NAME --certificate-authority=$CI_PROJECT_DIR/ca.crt --server=$CLUSTER_API --kubeconfig=$CI_PROJECT_DIR/.kube/config
+      kubectl config set-context $CLUSTER_NAME/$NAMESPACE/$SERVICE_ACCOUNT --user=$CLUSTER_NAME/$SERVICE_ACCOUNT --namespace=$NAMESPACE --cluster=$CLUSTER_NAME --kubeconfig=$CI_PROJECT_DIR/.kube/config
+      kubectl config use-context $CLUSTER_NAME/$NAMESPACE/$SERVICE_ACCOUNT --kubeconfig=$CI_PROJECT_DIR/.kube/config
+    - |
+      echo "Check cluster access..."
+      KUBECONFIG=$CI_PROJECT_DIR/.kube/config kubectl cluster-info --context $CLUSTER_NAME/$NAMESPACE/$SERVICE_ACCOUNT
   script:
     - |
+      export KUBECONFIG=$CI_PROJECT_DIR/.kube/config
       CT_FLAGS=(--config .gitlab/ct.yaml --helm-repo-extra-args "wojoinc-charts=--username gitlab-ci-token --password ${CI_JOB_TOKEN}")
 
       if [[ $ALL_CHARTS == "true" ]]; then
         CT_FLAGS+=(--all)
       fi
 
-      kubectl config set-context kind-${CI_PIPELINE_ID}-${K8S_VERSION}
+      kubectl config set-context $CLUSTER_NAME/$NAMESPACE/$SERVICE_ACCOUNT
       ct install "${CT_FLAGS[@]}"
-  after_script:
-    - |
-      echo "Deleting kind cluster..."
-      kind delete cluster --name "$CLUSTER_NAME"
   tags:
-    - gitlab-org-docker
+    - homelab
   parallel:
     matrix:
       - K8S_VERSION:
           - 1.27.3
           - 1.29.4
-  services:
-    - name: docker:dind
-      # Instead of "docker" use a DNS alias that kind includes in the SAN list
-      # when bootstrapping control-plane cert
-      alias: kubernetes
   needs:
     - chart:lint
   rules:
