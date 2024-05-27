@@ -119,6 +119,7 @@ chart:install:
     NAMESPACE: "gitlab-runner"
     GIT_DEPTH: 50
     GIT_STRATEGY: clone
+    VAULT_ADDR: "https://vault.wojoinc.xyz"
   id_tokens:
     HOMELAB_VAULT_JWT:
       aud: "vault://homelab.wojoinc.xyz"
