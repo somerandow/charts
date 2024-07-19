@@ -2,8 +2,8 @@ apiVersion: v2
 name: lidarr
 description: A Helm chart for deploying lidarr
 type: application
-version: 2.0.0
-appVersion: "2.3.3"
+version: 2.1.0
+appVersion: "2.4.3"
 maintainers:
   - name: WojoInc
     email: wojoinc@pm.me
