@@ -17,7 +17,7 @@ spec:
   type: {{ $service.type | default "ClusterIP"}}
   {{- if eq $service.type "Loadbalancer" }}
   loadBalancerIP: {{ required "loadBalancerIP is required when .type == Loadbalancer" $service.loadBalancerIP }}
-  {{- end -}}
+  {{- end }}
   {{- if $service.trafficPolicy }}
   externalTrafficPolicy: {{ $service.trafficPolicy.external | default "Cluster" }}
   internalTrafficPolicy: {{ $service.trafficPolicy.internal | default "Cluster" }}
