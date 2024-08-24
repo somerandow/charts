@@ -2,7 +2,7 @@ apiVersion: v2
 name: common
 description: A Helm chart for Kubernetes
 type: library
-version: 0.5.3
+version: 0.5.4
 appVersion: "1.16.0"
 maintainers:
   - name: WojoInc
