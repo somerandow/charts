@@ -26,7 +26,7 @@ spec:
     spec:
       # TODO handle service account creation
       serviceAccountName: default
-      hostUsers: {{ .userNamespaces | default true }}
+      hostUsers: {{ hasKey . "userNamespaces" | ternary (not .userNamespaces) true }}
       automountServiceAccountToken: true
       securityContext: {{ not (empty .context) | ternary (include "common.security.podContext" .context | nindent 8) `{}` }}
       dnsPolicy: ClusterFirst
