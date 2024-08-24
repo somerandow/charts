@@ -11,10 +11,11 @@ services:
 deployments:
   main:
     enabled: true
+    userNamespaces: true
     context:
       fsGroup: 568
       gid: 568
-      uid: 568
+      uid: 0
     containers:
       main:
         env:
