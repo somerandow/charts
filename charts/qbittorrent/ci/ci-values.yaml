@@ -1,3 +1,6 @@
+services:
+  bittorrent:
+    enabled: false
 deployments:
   main:
     volumes:
