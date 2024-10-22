@@ -1,0 +1,31 @@
+deployments:
+  main:
+    containers:
+      main:
+        # Use env vars from here https://github.com/BookStackApp/BookStack/blob/development/.env.example
+        env:
+          - name: APP_KEY
+            value: "abcdefghijklmnopqrstuvwxyz012345"
+          - name: APP_URL
+            value: https://example.com
+          - name: DB_HOST
+            value: bookstack-mysql
+          - name: DB_DATABASE
+            value: bookstack
+          - name: DB_USERNAME
+            value: bookstack
+          - name: DB_PASSWORD
+            value: bookstack
+mysql:
+  enabled: true
+  fullnameOverride: bookstack-mysql
+  primary:
+    persistence:
+      enabled: false
+  auth:
+    database: bookstack
+    username: bookstack
+    password: bookstack
+    rootPassword: "bookstack"
+  serviceAccount:
+    name: mysql
