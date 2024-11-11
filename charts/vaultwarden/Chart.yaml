@@ -2,8 +2,8 @@ apiVersion: v2
 name: vaultwarden
 description: A Helm chart for deploying vaultwarden
 type: application
-version: 1.4.3
-appVersion: "1.32.3"
+version: 1.4.4
+appVersion: "1.32.4"
 maintainers:
   - name: WojoInc
     email: wojoinc@pm.me
