@@ -2,8 +2,8 @@ apiVersion: v2
 name: sonarr
 description: A Helm chart for deploying Sonarr
 type: application
-version: 2.0.5
-appVersion: "4.0.10"
+version: 2.0.6
+appVersion: "4.0.11"
 maintainers:
   - name: WojoInc
     email: wojoinc@pm.me
