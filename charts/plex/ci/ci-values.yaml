@@ -3,8 +3,20 @@ deployments:
     volumes:
       config:
         type: emptyDir
+      data:
+        type: emptyDir
     containers:
       main:
         volumeMounts:
           config:
             path: "/config"
+          data:
+            path: "/data"
+# TODO: Fix service name templating in common chart to re-enable these, otherwise, we hit service name conflicts
+services:
+  main:
+    enabled: false
+  gdm:
+    enabled: false
+  lb:
+    enabled: false
