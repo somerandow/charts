@@ -2,8 +2,8 @@ apiVersion: v2
 name: radarr
 description: A Helm chart for deploying the radarr application
 type: application
-version: 1.11.0
-appVersion: "5.17.2"
+version: 1.12.0
+appVersion: "5.18.4"
 maintainers:
   - name: WojoInc
     email: wojoinc@pm.me
