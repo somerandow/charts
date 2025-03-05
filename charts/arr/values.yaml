@@ -1,0 +1,87 @@
+# Common chart values
+
+nameOverride: ""
+
+service:
+  port: 0000
+image:
+  repository: nginx
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+ingress:
+  main:
+    enabled: false
+    className: ""
+    host: ""
+    path: ""
+    pathType: ""
+    tls: false
+    annotations: {}
+  api:
+    enabled: false
+    className: ""
+    host: ""
+    path: ""
+    pathType: ""
+    tls: false
+    annotations: {}
+persistence:
+  config:
+    enabled: false
+    annotations: {}
+    accessModes: []
+    size: ""
+    className: ""
+  # TODO: Media storage
+  media:
+    existingClaim: ""
+    enabled: false
+    annotations: {}
+    accessModes: []
+    size: ""
+    className: ""
+probes:
+  livenessCmd: []
+  # For example, for Radarr:
+  #  - /usr/bin/env
+  #  - bash
+  #  - -c
+  #  # yamllint disable rule:line-length
+  #  - curl --fail localhost:7878/api/v3/system/status?apiKey=`IFS=\> && while read -d
+  #    \< E C; do if [[ $E = "ApiKey" ]]; then echo $C; fi; done < /config/config.xml`
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: false
+
+# TODO: Determine if the rest of these are needed
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

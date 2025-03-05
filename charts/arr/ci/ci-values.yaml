@@ -1,0 +1,18 @@
+service:
+  port: 7878
+image:
+  repository: ghcr.io/onedr0p/radarr
+  tag: 5.19.3
+persistence:
+  config:
+    enabled: false
+  media:
+    enabled: false
+probes:
+  livenessCmd:
+    - /usr/bin/env
+    - bash
+    - -c
+    # yamllint disable rule:line-length
+    - curl --fail localhost:7878/api/v3/system/status?apiKey=`IFS=\> && while read -d
+      \< E C; do if [[ $E = "ApiKey" ]]; then echo $C; fi; done < /config/config.xml`

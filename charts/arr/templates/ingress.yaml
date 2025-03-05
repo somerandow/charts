@@ -1,0 +1,63 @@
+{{- if .Values.ingress.main.enabled -}}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "arr.resourceName" (dict "ctx" . "extraResourceName" "main") }}
+  labels: {{- include "arr.metadata.labels" . | nindent 4 }}
+  {{- if not (empty .Values.ingress.main.annotations) }}
+  annotations: {{ .Values.ingress.main.annotations | toYaml | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if not (empty .Values.ingress.main.className) }}
+  ingressClassName: {{ .Values.ingress.main.className }}
+  {{- end }}
+  rules:
+    - host: {{ .Values.ingress.main.host }}
+      http:
+        paths:
+          - path: {{ .Values.ingress.main.path | default "/" }}
+            pathType: {{ .Values.ingress.main.pathType | default "Prefix" }}
+            backend:
+              service:
+                name: {{ include "arr.resourceName" (dict "ctx" . "extraResourceName" "main") }}
+                port:
+                  number: {{ .Values.service.port }}
+  {{- if .Values.ingress.main.tls }}
+  tls:
+    - hosts:
+        - {{ .Values.ingress.main.host }}
+      secretName: {{ include "arr.resourceName" (dict "ctx" . "extraResourceName" "cert") }}
+  {{- end }}
+{{- end -}}
+{{- if .Values.ingress.api.enabled }}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "arr.resourceName" (dict "ctx" . "extraResourceName" "api") }}
+  {{- if not (empty .Values.ingress.api.annotations) }}
+  annotations: {{ .Values.ingress.api.annotations | toYaml | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if not (empty .Values.ingress.api.className) }}
+  ingressClassName: {{ .Values.ingress.api.className }}
+  {{- end }}
+  rules:
+    - host: {{ .Values.ingress.api.host }}
+      http:
+        paths:
+          - path: {{ .Values.ingress.api.path | default "/" }}
+            pathType: {{ .Values.ingress.api.pathType | default "Prefix" }}
+            backend:
+              service:
+                name: {{ include "arr.resourceName" (dict "ctx" . "extraResourceName" "main") }}
+                port:
+                  number: {{ .Values.service.port }}
+  {{- if .Values.ingress.api.tls }}
+  tls:
+    - hosts:
+        - {{ .Values.ingress.api.host }}
+      secretName: {{ include "arr.resourceName" (dict "ctx" . "extraResourceName" "cert") }}
+  {{- end }}
+{{- end -}}
