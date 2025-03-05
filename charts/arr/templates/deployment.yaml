@@ -1,0 +1,102 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "arr.resourceName" (dict "ctx" . "extraResourceName" "main") }}
+  labels:
+    {{- include "arr.metadata.labels" . | nindent 4 }}
+  annotations: {}
+spec:
+  revisionHistoryLimit: 1
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels: {{- include "arr.metadata.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels: {{- include "arr.metadata.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ .Values.serviceAccount.create | ternary
+      (include "arr.resourceName" (dict "ctx" . "extraResourceName" "")) ("default") }}
+      automountServiceAccountToken: false
+      securityContext:
+        fsGroup: 568
+        runAsGroup: 568
+        runAsUser: 568
+        supplementalGroups:
+          - 997
+      dnsPolicy: ClusterFirst
+      enableServiceLinks: true
+      containers:
+        - name: main
+          image: {{ (.Values.image.tag | default .Chart.AppVersion) | printf "%s:%s" .Values.image.repository | quote }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | default "IfNotPresent" }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: false
+          env:
+            - name: TZ
+              value: America/Chicago
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: media
+              mountPath: /media
+          {{- if .Values.probes.livenessCmd }}
+          livenessProbe:
+            exec:
+              command: {{ .Values.probes.livenessCmd | toYaml | nindent 16 }}
+            initialDelaySeconds: 0
+            timeoutSeconds: 1
+            periodSeconds: 10
+            failureThreshold: 3
+            successThreshold: 1
+          {{- end }}
+          readinessProbe:
+            tcpSocket:
+              port: {{ .Values.service.port }}
+            initialDelaySeconds: 0
+            timeoutSeconds: 1
+            periodSeconds: 10
+            failureThreshold: 3
+            successThreshold: 1
+          startupProbe:
+            tcpSocket:
+              port: {{ .Values.service.port }}
+            initialDelaySeconds: 0
+            timeoutSeconds: 1
+            periodSeconds: 10
+            failureThreshold: 3
+            successThreshold: 1
+          resources:
+            limits:
+              cpu: "1"
+              memory: 1Gi
+            requests:
+              cpu: 200m
+              memory: 100Mi
+      volumes:
+        - name: config
+          {{- if .Values.persistence.config.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ include "arr.resourceName" (dict "ctx" . "extraResourceName" "config") }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+        - name: media
+          {{- if .Values.persistence.media.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ empty .Values.persistence.media.existingClaim | ternary
+            (.Values.persistence.media.existingClaim)
+            (include "arr.resourceName" (dict "ctx" . "extraResourceName" "media")) }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}

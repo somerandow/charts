@@ -1,0 +1,40 @@
+{{- if .Values.persistence.config.enabled }}
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ include "arr.resourceName" (dict "ctx" . "extraResourceName" "config") }}
+  labels: {{ include "arr.metadata.labels" . | nindent 4}}
+  {{- if not (empty .Values.persistence.config.annotations) }}
+  annotations: {{ .Values.persistence.config.annotations | toYaml | nindent 4 }}
+  {{- end }}
+spec:
+  accessModes: {{ not (empty .Values.persistence.config.accessModes) | ternary
+  (.Values.persistence.config.accessModes) (list "ReadWriteOnce") | toYaml | nindent 4 }}
+  resources:
+    requests:
+      storage: {{ empty .Values.persistence.config.size | default "1Gi" | quote }}
+{{- if not (empty .Values.persistence.config.className) }}
+  storageClassName: {{ .Values.persistence.config.className }}
+{{- end }}
+{{- end -}}
+{{- if and .Values.persistence.media.enabled (empty .Values.persistence.media.existingClaim) }}
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ include "arr.resourceName" (dict "ctx" . "extraResourceName" "media") }}
+  labels: {{ include "arr.metadata.labels" . | nindent 4}}
+  {{- if not (empty .Values.persistence.media.annotations) }}
+  annotations: {{ .Values.persistence.media.annotations | toYaml | nindent 4 }}
+  {{- end }}
+spec:
+  accessModes: {{ not (empty .Values.persistence.media.accessModes) | ternary
+  (.Values.persistence.media.accessModes) (list "ReadWriteOnce") | toYaml | nindent 4 }}
+  resources:
+    requests:
+      storage: {{ empty .Values.persistence.media.size | default "1Gi" | quote }}
+{{- if not (empty .Values.persistence.media.className) }}
+  storageClassName: {{ .Values.persistence.media.className }}
+{{- end }}
+{{- end -}}
