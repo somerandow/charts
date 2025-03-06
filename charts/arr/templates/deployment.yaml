@@ -95,8 +95,8 @@ spec:
           {{- if .Values.persistence.media.enabled }}
           persistentVolumeClaim:
             claimName: {{ empty .Values.persistence.media.existingClaim | ternary
-            (.Values.persistence.media.existingClaim)
-            (include "arr.resourceName" (dict "ctx" . "extraResourceName" "media")) }}
+            (include "arr.resourceName" (dict "ctx" . "extraResourceName" "media"))
+            (.Values.persistence.media.existingClaim) }}
           {{- else }}
           emptyDir: {}
           {{- end }}
