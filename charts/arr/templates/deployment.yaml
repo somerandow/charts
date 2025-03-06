@@ -18,7 +18,7 @@ spec:
       labels: {{- include "arr.metadata.selectorLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ .Values.serviceAccount.create | ternary
-      (include "arr.resourceName" (dict "ctx" . "extraResourceName" "")) ("default") }}
+      (include "arr.resourceName" (dict "ctx" . "extraResourceName" "main")) ("default") }}
       automountServiceAccountToken: false
       securityContext:
         fsGroup: 568
