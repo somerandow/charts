@@ -13,7 +13,7 @@ spec:
   (.Values.persistence.config.accessModes) (list "ReadWriteOnce") | toYaml | nindent 4 }}
   resources:
     requests:
-      storage: {{ empty .Values.persistence.config.size | default "1Gi" | quote }}
+      storage: {{ .Values.persistence.config.size | default "1Gi" | quote }}
 {{- if not (empty .Values.persistence.config.className) }}
   storageClassName: {{ .Values.persistence.config.className }}
 {{- end }}
@@ -33,7 +33,7 @@ spec:
   (.Values.persistence.media.accessModes) (list "ReadWriteOnce") | toYaml | nindent 4 }}
   resources:
     requests:
-      storage: {{ empty .Values.persistence.media.size | default "1Gi" | quote }}
+      storage: {{ .Values.persistence.media.size | default "1Gi" | quote }}
 {{- if not (empty .Values.persistence.media.className) }}
   storageClassName: {{ .Values.persistence.media.className }}
 {{- end }}
