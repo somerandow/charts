@@ -1,60 +1,61 @@
 nameOverride: ""
 
-services:
-  main:
-    enabled: true
-    ports:
-      - name: http
-        port: 8080
-        target: http
-  webserver:
-    enabled: true
-    ports:
-      - name: webserver
-        port: 8081
-        target: webserver
+image:
+  repository: registry.gitlab.com/wojoinc-homelab/images/calibre
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "testing"
+  imagePullSecrets:
+    - name: gitlab-cred
+persistence:
+  config:
+    enabled: false
+    annotations: {}
+    accessModes: []
+    size: ""
+    className: ""
+  media:
+    existingClaim: ""
+    enabled: false
+    annotations: {}
+    accessModes: []
+    size: ""
+    className: ""
+probes: {}
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: false
+deployment:
+  useHostUserNamespace: false
 
-deployments:
-  main:
-    enabled: true
-    context:
-      fsGroup: 568
-      gid: 568
-      uid: 568
-    containers:
-      main:
-        env:
-          - name: PGID
-            value: "568"
-          - name: PUID
-            value: "568"
-          - name: TZ
-            value: America/Chicago
-          - name: UMASK_SET
-            value: "022"
-          - name: SUBFOLDER
-            value: "/calibre/"
-        image:
-          repository: ghcr.io/linuxserver/calibre
-        resources:
-          limits:
-            cpu: 1500m
-            memory: 1532Mi
-          requests:
-            cpu: 200m
-            memory: 100Mi
-        ports:
-          http:
-            port: 8080
-          webserver:
-            port: 8081
-        probes:
-          liveness:
-            enabled: true
-            port: 8080
-          readiness:
-            enabled: true
-            port: 8080
-          startup:
-            enabled: true
-            port: 8080
+# TODO: Determine if the rest of these are needed
+podAnnotations: {}
+
+podSecurityContext: {}
+# fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+# runAsUser: 1000
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+#   memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
