@@ -1,0 +1,110 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "calibre.resourceName" (dict "ctx" . "extraResourceName" "main") }}
+  labels: {{ include "calibre.metadata.labels" . | nindent 4}}
+  annotations: {}
+spec:
+  revisionHistoryLimit: 1
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels: {{- include "calibre.metadata.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels: {{- include "calibre.metadata.selectorLabels" . | nindent 8 }}
+    spec:
+      hostUsers: {{ .Values.deployment.useHostUserNamespace | default false}}
+      serviceAccountName: {{ .Values.serviceAccount.create | ternary
+      (include "calibre.resourceName" (dict "ctx" . "extraResourceName" "main")) ("default") }}
+      automountServiceAccountToken: false
+      securityContext:
+        fsGroup: 568
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 568
+        # Linuxserver images require setting user via s6 overlay. If using one of these images
+        # user should specify useHostUserNamespace==false, which will allow the container to run as "root"
+        # in a dedicated namespace
+        runAsUser: 568
+        runAsNonRoot: true
+      dnsPolicy: ClusterFirst
+      enableServiceLinks: true
+      imagePullSecrets: {{
+        empty (.Values.image.imagePullSecrets) | ternary dict (.Values.image.imagePullSecrets | toYaml | nindent 8)
+      }}
+      containers:
+        - name: calibre
+          image: {{ (.Values.image.tag | default .Chart.AppVersion) | printf "%s:%s" .Values.image.repository | quote }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | default "IfNotPresent" }}
+          securityContext:
+            allowPrivilegeEscalation: true
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: false
+          env:
+            - name: TZ
+              value: America/Chicago
+            - name: UMASK_SET
+              value: "022"
+          ports:
+            - name: content-server
+              containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            - name: config
+              mountPath: "/config"
+              subPath: ""
+            - name: media
+              mountPath: "/library"
+              subPath: "books"
+          livenessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 0
+            timeoutSeconds: 1
+            periodSeconds: 10
+            failureThreshold: 3
+            successThreshold: 1
+          readinessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 0
+            timeoutSeconds: 1
+            periodSeconds: 10
+            failureThreshold: 3
+            successThreshold: 1
+          startupProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 0
+            timeoutSeconds: 1
+            periodSeconds: 10
+            failureThreshold: 3
+            successThreshold: 1
+          resources:
+            limits:
+              cpu: 1500m
+              memory: 1532Mi
+            requests:
+              cpu: 200m
+              memory: 100Mi
+      volumes:
+        - name: config
+          {{- if .Values.persistence.config.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ include "calibre.resourceName" (dict "ctx" . "extraResourceName" "config") }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+        - name: media
+          {{- if .Values.persistence.media.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ empty .Values.persistence.media.existingClaim | ternary
+          (include "calibre.resourceName" (dict "ctx" . "extraResourceName" "media"))
+            (.Values.persistence.media.existingClaim) }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
