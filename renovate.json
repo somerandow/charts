@@ -3,13 +3,17 @@
   "extends": [
     "config:recommended"
   ],
-  "lockFileMaintenance": { "enabled": true },
+  "lockFileMaintenance": {
+    "enabled": true
+  },
   "bumpVersion": "patch",
   "customManagers": [
     {
       "customType": "regex",
       "description": "Update bazarr Chart.yaml version",
-      "fileMatch": ["^charts\\/bazarr\\/Chart\\.yaml$"],
+      "managerFilePatterns": [
+        "/^charts\\/bazarr\\/Chart\\.yaml$/"
+      ],
       "matchStrings": [
         "appVersion: \"(?<currentValue>.*?)\"\\s+"
       ],
@@ -19,7 +23,9 @@
     {
       "customType": "regex",
       "description": "Update sonarr Chart.yaml version",
-      "fileMatch": ["^charts\\/sonarr\\/Chart\\.yaml$"],
+      "managerFilePatterns": [
+        "/^charts\\/sonarr\\/Chart\\.yaml$/"
+      ],
       "matchStrings": [
         "appVersion: \"(?<currentValue>.*?)\"\\s+"
       ],
@@ -29,7 +35,9 @@
     {
       "customType": "regex",
       "description": "Update radarr Chart.yaml version",
-      "fileMatch": ["^charts\\/radarr\\/Chart\\.yaml$"],
+      "managerFilePatterns": [
+        "/^charts\\/radarr\\/Chart\\.yaml$/"
+      ],
       "matchStrings": [
         "appVersion: \"(?<currentValue>.*?)\"\\s+"
       ],
@@ -39,7 +47,9 @@
     {
       "customType": "regex",
       "description": "Update lidarr Chart.yaml version",
-      "fileMatch": ["^charts\\/lidarr\\/Chart\\.yaml$"],
+      "managerFilePatterns": [
+        "/^charts\\/lidarr\\/Chart\\.yaml$/"
+      ],
       "matchStrings": [
         "appVersion: \"(?<currentValue>.*?)\"\\s+"
       ],
@@ -49,7 +59,9 @@
     {
       "customType": "regex",
       "description": "Update qbittorrent Chart.yaml version",
-      "fileMatch": ["^charts\\/qbittorrent\\/Chart\\.yaml$"],
+      "managerFilePatterns": [
+        "/^charts\\/qbittorrent\\/Chart\\.yaml$/"
+      ],
       "matchStrings": [
         "appVersion: \"(?<currentValue>.*?)\"\\s+"
       ],
@@ -59,7 +71,9 @@
     {
       "customType": "regex",
       "description": "Update ombi Chart.yaml version",
-      "fileMatch": ["^charts\\/ombi\\/Chart\\.yaml$"],
+      "managerFilePatterns": [
+        "/^charts\\/ombi\\/Chart\\.yaml$/"
+      ],
       "matchStrings": [
         "appVersion: \"(?<currentValue>.*?)\"\\s+"
       ],
@@ -69,7 +83,9 @@
     {
       "customType": "regex",
       "description": "Update bookstack Chart.yaml version",
-      "fileMatch": ["^charts\\/bookstack\\/Chart\\.yaml$"],
+      "managerFilePatterns": [
+        "/^charts\\/bookstack\\/Chart\\.yaml$/"
+      ],
       "matchStrings": [
         "appVersion: \"(?<currentValue>.*?)\"\\s+"
       ],
@@ -79,7 +95,9 @@
     {
       "customType": "regex",
       "description": "Update ombi Chart.yaml version",
-      "fileMatch": ["^charts\\/ombi\\/Chart\\.yaml$"],
+      "managerFilePatterns": [
+        "/^charts\\/ombi\\/Chart\\.yaml$/"
+      ],
       "matchStrings": [
         "appVersion: \"(?<currentValue>.*?)\"\\s+"
       ],
@@ -89,7 +107,9 @@
     {
       "customType": "regex",
       "description": "Update plex Chart.yaml version",
-      "fileMatch": ["^charts\\/plex\\/Chart\\.yaml$"],
+      "managerFilePatterns": [
+        "/^charts\\/plex\\/Chart\\.yaml$/"
+      ],
       "matchStrings": [
         "appVersion: \"(?<currentValue>.*?)\"\\s+"
       ],
@@ -100,7 +120,9 @@
     {
       "customType": "regex",
       "description": "Update prowlarr Chart.yaml version",
-      "fileMatch": ["^charts\\/prowlarr\\/Chart\\.yaml$"],
+      "managerFilePatterns": [
+        "/^charts\\/prowlarr\\/Chart\\.yaml$/"
+      ],
       "matchStrings": [
         "appVersion: \"(?<currentValue>.*?)\"\\s+"
       ],
@@ -110,7 +132,9 @@
     {
       "customType": "regex",
       "description": "Update readarr Chart.yaml version",
-      "fileMatch": ["^charts\\/readarr\\/Chart\\.yaml$"],
+      "managerFilePatterns": [
+        "/^charts\\/readarr\\/Chart\\.yaml$/"
+      ],
       "matchStrings": [
         "appVersion: \"(?<currentValue>.*?)\"\\s+"
       ],
@@ -120,7 +144,9 @@
     {
       "customType": "regex",
       "description": "Update tautulli Chart.yaml version",
-      "fileMatch": ["^charts\\/tautulli\\/Chart\\.yaml$"],
+      "managerFilePatterns": [
+        "/^charts\\/tautulli\\/Chart\\.yaml$/"
+      ],
       "matchStrings": [
         "appVersion: \"(?<currentValue>.*?)\"\\s+"
       ],
@@ -130,7 +156,9 @@
     {
       "customType": "regex",
       "description": "Update unpackerr Chart.yaml version",
-      "fileMatch": ["^charts\\/unpackerr\\/Chart\\.yaml$"],
+      "managerFilePatterns": [
+        "/^charts\\/unpackerr\\/Chart\\.yaml$/"
+      ],
       "matchStrings": [
         "appVersion: \"(?<currentValue>.*?)\"\\s+"
       ],
@@ -140,7 +168,9 @@
     {
       "customType": "regex",
       "description": "Update vaultwarden Chart.yaml version",
-      "fileMatch": ["^charts\\/vaultwarden\\/Chart\\.yaml$"],
+      "managerFilePatterns": [
+        "/^charts\\/vaultwarden\\/Chart\\.yaml$/"
+      ],
       "matchStrings": [
         "appVersion: \"(?<currentValue>.*?)\"\\s+"
       ],
@@ -151,9 +181,11 @@
   "packageRules": [
     {
       "description": "Bump helm chart versions when Chart.yaml is changed",
-      "matchFileNames": ["**/Chart.yaml"],
+      "matchFileNames": [
+        "**/Chart.yaml"
+      ],
       "postUpgradeTasks": {
-      "commands": [
+        "commands": [
           "bash scripts/bump-chart-version.sh '{{{packageFileDir}}}' '{{{isMajor}}}' '{{{isPatch}}}'"
         ],
         "executionMode": "branch"
@@ -161,14 +193,21 @@
     },
     {
       "description": "Auto-merge non-major updates",
-      "matchUpdateTypes": ["minor", "patch"],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
       "matchCurrentVersion": "!/^0/",
       "automerge": true
     },
     {
       "description": "Handle plex image versioning",
-      "matchDatasources": ["docker"],
-      "matchPackageNames": ["ghcr.io/onedr0p/plex"],
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchPackageNames": [
+        "ghcr.io/onedr0p/plex"
+      ],
       "versioning": "regex:^(?<major>\\d+)(\\.(?<minor>\\d+))?(\\.(?<patch>\\d+))?(\\.(?<build>\\d+))?(-(?<revision>.*))?$"
     }
   ]
