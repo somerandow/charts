@@ -1,16 +1,17 @@
-{{- range .Values.ingress -}}
-{{ if .forwardAuth.enabled -}}
+{{- range $name, $config := .Values.ingress -}}
+{{- if $config.forwardAuth.enabled }}
+---
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
 metadata:
-  name: {{ include "arr.resourceName" (dict "ctx" $ "extraResourceName" "main") }}-forward-auth
+  name: {{ include "arr.resourceName" (dict "ctx" $ "extraResourceName" $name) }}-forward-auth
 spec:
   forwardAuth:
-    address: https://{{ .forwardAuth.endpoint }}/oauth2/auth{{
+    address: https://{{ $config.forwardAuth.endpoint }}/oauth2/auth{{
     ternary
       ""
-      ( printf "%s%s" "?allowed_groups=" ( join "," .forwardAuth.allowedGroups | urlquery | trim ))
-      ( empty .forwardAuth.allowedGroups )
+      ( printf "%s%s" "?allowed_groups=" ( join "," $config.forwardAuth.allowedGroups | urlquery | trim ))
+      ( empty $config.forwardAuth.allowedGroups )
     }}
     authResponseHeaders:
       - X-Auth-Request-Access-Token
@@ -22,10 +23,10 @@ spec:
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
 metadata:
-  name: {{ include "arr.resourceName" (dict "ctx" $ "extraResourceName" "main") }}-forward-auth-rd
+  name: {{ include "arr.resourceName" (dict "ctx" $ "extraResourceName" $name) }}-forward-auth-rd
 spec:
   forwardAuth:
-    address: https://{{ .forwardAuth.endpoint }}/
+    address: https://{{ $config.forwardAuth.endpoint }}/
     authResponseHeaders:
       - X-Auth-Request-Access-Token
       - X-Auth-Request-Redirect
