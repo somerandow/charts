@@ -1,13 +1,16 @@
 # Common chart values
 
 nameOverride: ""
-
 service:
-  port: 0000
+  # -- Sets the port to be used for the main service,
+  # should match the common port for the respective *arr app
+  port: 1111 # @schema required:true; minimum:1024
 image:
-  repository: nginx
+  # -- Sets the image to be used
+  repository: alpine
+  # -- Sets the pullPolicy for the main container
   pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
+  # -- Sets the image tag. This should always be set as it will not fall back to chart appVersion
   tag: ""
 ingress:
   main:
@@ -17,6 +20,10 @@ ingress:
     path: ""
     pathType: ""
     tls: false
+    forwardAuth:
+      enabled: false
+      allowedGroups: [ ]
+      endpoint: ""
     annotations: {}
   api:
     enabled: false
@@ -25,6 +32,10 @@ ingress:
     path: ""
     pathType: ""
     tls: false
+    forwardAuth:
+      enabled: false
+      allowedGroups: [ ]
+      endpoint: ""
     annotations: {}
 persistence:
   config:
