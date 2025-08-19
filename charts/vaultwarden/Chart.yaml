@@ -2,14 +2,14 @@ apiVersion: v2
 name: vaultwarden
 description: A Helm chart for deploying vaultwarden
 type: application
-version: 1.5.2
+version: 1.5.3
 appVersion: "1.33.2"
 maintainers:
   - name: WojoInc
     email: wojoinc@pm.me
 dependencies:
   - name: common
-    version: 0.4.2
+    version: 0.5.5
     repository: oci://registry.gitlab.com/wojoinc/helm-charts
   - name: postgresql
     version: 13.4.6
