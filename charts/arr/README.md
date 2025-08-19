@@ -1,6 +1,6 @@
 # arr
 
-![Version: 0.7.0](https://img.shields.io/badge/Version-0.7.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.7.5](https://img.shields.io/badge/Version-0.7.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 A common Helm chart for *arr apps
 
@@ -59,3 +59,4 @@ A common Helm chart for *arr apps
 | service.port | int | `1111` | Sets the port to be used for the main service, should match the common port for the respective *arr app |
 | serviceAccount.create | bool | `false` |  |
 | tolerations | list | `[]` |  |
+
