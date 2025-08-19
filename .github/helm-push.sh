@@ -9,12 +9,12 @@ REPO=$1
 
 if [ -z "$1" ]; then
   echo "no repository specified!"
-  return 1
+  exit 1
 fi
 
 if [ ! -d .cr-release-packages ] || [ -z "$(ls -A .cr-release-packages)" ]; then
   echo "no packages found, exiting gracefully..."
-  return 0
+  exit 0
 fi
 
 for pkg in .cr-release-packages/*; do
@@ -40,4 +40,4 @@ for pkg in .cr-release-packages/*; do
     rc=1
   fi
 done
-return $rc
+exit $rc
