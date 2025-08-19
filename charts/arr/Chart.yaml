@@ -2,7 +2,7 @@ apiVersion: v2
 name: arr
 description: A common Helm chart for *arr apps
 type: application
-version: 0.7.6
+version: 0.7.7
 maintainers:
   - name: somerandow
     email: wojoinc@pm.me
