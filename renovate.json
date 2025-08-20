@@ -22,11 +22,13 @@
       "matchFileNames": [
         "charts/**"
       ],
-      "bumpVersions": {
-        "filePatterns": ["{{packageFileDir}}/Chart.{yaml,yml}"],
-        "matchStrings": ["version:\\s(?<version>[^\\s]+)"],
-        "bumpType": "{{#if isPatch}}patch{{else if isMajor}}major{{else}}minor{{/if}}"
-      }
+      "bumpVersions": [
+        {
+          "filePatterns": ["{{packageFileDir}}/Chart.{yaml,yml}"],
+          "matchStrings": ["version:\\s(?<version>[^\\s]+)"],
+          "bumpType": "{{#if isPatch}}patch{{else if isMajor}}major{{else}}minor{{/if}}"
+        }
+      ]
     },
     {
       "description": "Auto-merge non-major updates",
