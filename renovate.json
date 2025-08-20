@@ -6,189 +6,26 @@
   "lockFileMaintenance": {
     "enabled": true
   },
-  "bumpVersion": "patch",
   "customManagers": [
     {
       "customType": "regex",
-      "description": "Update bazarr Chart.yaml version",
-      "managerFilePatterns": [
-        "/^charts\\/bazarr\\/Chart\\.yaml$/"
-      ],
+      "description": "Update chart appVersions",
+      "managerFilePatterns": ["/^charts/**/Chart.yaml$/"],
       "matchStrings": [
-        "appVersion: \"(?<currentValue>.*?)\"\\s+"
-      ],
-      "datasourceTemplate": "docker",
-      "depNameTemplate": "ghcr.io/onedr0p/bazarr"
-    },
-    {
-      "customType": "regex",
-      "description": "Update sonarr Chart.yaml version",
-      "managerFilePatterns": [
-        "/^charts\\/sonarr\\/Chart\\.yaml$/"
-      ],
-      "matchStrings": [
-        "appVersion: \"(?<currentValue>.*?)\"\\s+"
-      ],
-      "datasourceTemplate": "docker",
-      "depNameTemplate": "ghcr.io/onedr0p/sonarr"
-    },
-    {
-      "customType": "regex",
-      "description": "Update radarr Chart.yaml version",
-      "managerFilePatterns": [
-        "/^charts\\/radarr\\/Chart\\.yaml$/"
-      ],
-      "matchStrings": [
-        "appVersion: \"(?<currentValue>.*?)\"\\s+"
-      ],
-      "datasourceTemplate": "docker",
-      "depNameTemplate": "ghcr.io/onedr0p/radarr"
-    },
-    {
-      "customType": "regex",
-      "description": "Update lidarr Chart.yaml version",
-      "managerFilePatterns": [
-        "/^charts\\/lidarr\\/Chart\\.yaml$/"
-      ],
-      "matchStrings": [
-        "appVersion: \"(?<currentValue>.*?)\"\\s+"
-      ],
-      "datasourceTemplate": "docker",
-      "depNameTemplate": "ghcr.io/onedr0p/lidarr"
-    },
-    {
-      "customType": "regex",
-      "description": "Update qbittorrent Chart.yaml version",
-      "managerFilePatterns": [
-        "/^charts\\/qbittorrent\\/Chart\\.yaml$/"
-      ],
-      "matchStrings": [
-        "appVersion: \"(?<currentValue>.*?)\"\\s+"
-      ],
-      "datasourceTemplate": "docker",
-      "depNameTemplate": "ghcr.io/onedr0p/qbittorrent"
-    },
-    {
-      "customType": "regex",
-      "description": "Update ombi Chart.yaml version",
-      "managerFilePatterns": [
-        "/^charts\\/ombi\\/Chart\\.yaml$/"
-      ],
-      "matchStrings": [
-        "appVersion: \"(?<currentValue>.*?)\"\\s+"
-      ],
-      "datasourceTemplate": "docker",
-      "depNameTemplate": "ghcr.io/flaresolverr/flaresolverr"
-    },
-    {
-      "customType": "regex",
-      "description": "Update bookstack Chart.yaml version",
-      "managerFilePatterns": [
-        "/^charts\\/bookstack\\/Chart\\.yaml$/"
-      ],
-      "matchStrings": [
-        "appVersion: \"(?<currentValue>.*?)\"\\s+"
-      ],
-      "datasourceTemplate": "docker",
-      "depNameTemplate": "docker.io/solidnerd/bookstack"
-    },
-    {
-      "customType": "regex",
-      "description": "Update ombi Chart.yaml version",
-      "managerFilePatterns": [
-        "/^charts\\/ombi\\/Chart\\.yaml$/"
-      ],
-      "matchStrings": [
-        "appVersion: \"(?<currentValue>.*?)\"\\s+"
-      ],
-      "datasourceTemplate": "docker",
-      "depNameTemplate": "ghcr.io/linuxserver/ombi"
-    },
-    {
-      "customType": "regex",
-      "description": "Update plex Chart.yaml version",
-      "managerFilePatterns": [
-        "/^charts\\/plex\\/Chart\\.yaml$/"
-      ],
-      "matchStrings": [
-        "appVersion: \"(?<currentValue>.*?)\"\\s+"
-      ],
-      "datasourceTemplate": "docker",
-      "depNameTemplate": "ghcr.io/onedr0p/plex",
-      "versioningTemplate": "regex:^(?<major>\\d+)(\\.(?<minor>\\d+))?(\\.(?<patch>\\d+))?(\\.(?<build>\\d+))?(-(?<revision>.*))?$"
-    },
-    {
-      "customType": "regex",
-      "description": "Update prowlarr Chart.yaml version",
-      "managerFilePatterns": [
-        "/^charts\\/prowlarr\\/Chart\\.yaml$/"
-      ],
-      "matchStrings": [
-        "appVersion: \"(?<currentValue>.*?)\"\\s+"
-      ],
-      "datasourceTemplate": "docker",
-      "depNameTemplate": "ghcr.io/onedr0p/prowlarr"
-    },
-    {
-      "customType": "regex",
-      "description": "Update readarr Chart.yaml version",
-      "managerFilePatterns": [
-        "/^charts\\/readarr\\/Chart\\.yaml$/"
-      ],
-      "matchStrings": [
-        "appVersion: \"(?<currentValue>.*?)\"\\s+"
-      ],
-      "datasourceTemplate": "docker",
-      "depNameTemplate": "ghcr.io/onedr0p/readarr-develop"
-    },
-    {
-      "customType": "regex",
-      "description": "Update tautulli Chart.yaml version",
-      "managerFilePatterns": [
-        "/^charts\\/tautulli\\/Chart\\.yaml$/"
-      ],
-      "matchStrings": [
-        "appVersion: \"(?<currentValue>.*?)\"\\s+"
-      ],
-      "datasourceTemplate": "docker",
-      "depNameTemplate": "ghcr.io/onedr0p/tautulli"
-    },
-    {
-      "customType": "regex",
-      "description": "Update unpackerr Chart.yaml version",
-      "managerFilePatterns": [
-        "/^charts\\/unpackerr\\/Chart\\.yaml$/"
-      ],
-      "matchStrings": [
-        "appVersion: \"(?<currentValue>.*?)\"\\s+"
-      ],
-      "datasourceTemplate": "docker",
-      "depNameTemplate": "docker.io/golift/unpackerr"
-    },
-    {
-      "customType": "regex",
-      "description": "Update vaultwarden Chart.yaml version",
-      "managerFilePatterns": [
-        "/^charts\\/vaultwarden\\/Chart\\.yaml$/"
-      ],
-      "matchStrings": [
-        "appVersion: \"(?<currentValue>.*?)\"\\s+"
-      ],
-      "datasourceTemplate": "docker",
-      "depNameTemplate": "docker.io/vaultwarden/server"
+        "# renovate: datasource=(?<datasource>.*?) depName=(?<depName>.*?)\\s+appVersion: \\S?(?<currentValue>[^\"]+)"
+      ]
     }
   ],
   "packageRules": [
     {
-      "description": "Bump helm chart versions when Chart.yaml is changed",
+      "description": "Bump helm chart versions when chart dependencies are updated",
       "matchFileNames": [
-        "**/Chart.yaml"
+        "charts/**"
       ],
-      "postUpgradeTasks": {
-        "commands": [
-          "bash scripts/bump-chart-version.sh '{{{packageFileDir}}}' '{{{isMajor}}}' '{{{isPatch}}}'"
-        ],
-        "executionMode": "branch"
+      "bumpVersions": {
+        "filePatterns": ["{{packageFileDir}}/Chart.{yaml,yml}"],
+        "matchStrings": ["version:\\s(?<version>[^\\s]+)"],
+        "bumpType": "{{#if isPatch}}patch{{else if isMajor}}major{{else}}minor{{/if}}"
       }
     },
     {
@@ -199,16 +36,6 @@
       ],
       "matchCurrentVersion": "!/^0/",
       "automerge": true
-    },
-    {
-      "description": "Handle plex image versioning",
-      "matchDatasources": [
-        "docker"
-      ],
-      "matchPackageNames": [
-        "ghcr.io/onedr0p/plex"
-      ],
-      "versioning": "regex:^(?<major>\\d+)(\\.(?<minor>\\d+))?(\\.(?<patch>\\d+))?(\\.(?<build>\\d+))?(-(?<revision>.*))?$"
     }
   ]
 }
