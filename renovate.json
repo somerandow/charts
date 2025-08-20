@@ -10,7 +10,7 @@
     {
       "customType": "regex",
       "description": "Update chart appVersions",
-      "managerFilePatterns": ["/^charts/**/Chart.yaml$/"],
+      "managerFilePatterns": ["/^charts\/.*\/Chart.yaml$/"],
       "matchStrings": [
         "# renovate: datasource=(?<datasource>.*?) depName=(?<depName>.*?)\\s+appVersion: \\S?(?<currentValue>[^\"]+)"
       ]
