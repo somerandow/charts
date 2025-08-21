@@ -1,9 +1,0 @@
-dependencies:
-- name: common
-  repository: oci://registry.gitlab.com/wojoinc/helm-charts
-  version: 0.4.2
-- name: mysql
-  repository: https://charts.bitnami.com/bitnami
-  version: 11.1.20
-digest: sha256:c47c6681466a4e82a10059021dbcf8fe6ff0bab4eb3b12c900e8c8a3ce8531b9
-generated: "2024-11-05T07:03:14.678826378Z"
