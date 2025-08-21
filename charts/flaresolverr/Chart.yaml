@@ -2,13 +2,13 @@ apiVersion: v2
 name: flaresolverr
 description: A Helm chart for FlareSolverr
 type: application
-version: 1.0.0
+version: 2.0.0
 
 maintainers:
   - name: somerandow
     email: wojoinc@pm.me
 # renovate: datasource=github-releases depName=FlareSolverr/FlareSolverr
-appVersion: "v1.2.8"
+appVersion: "v3.3.25"
 dependencies:
   - name: common
     version: 0.4.2
