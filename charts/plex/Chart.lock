@@ -3,4 +3,4 @@ dependencies:
   repository: oci://registry.gitlab.com/wojoinc/helm-charts
   version: 0.4.2
 digest: sha256:e7fb10f117e7ba49faf61d7109e80fb01c4078113e3a3760bb0a649d7a56e138
-generated: "2024-02-26T12:10:06.180395314-06:00"
+generated: "2025-08-20T20:18:36.158885123-05:00"
