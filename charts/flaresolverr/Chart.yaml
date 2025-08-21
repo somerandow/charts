@@ -2,7 +2,7 @@ apiVersion: v2
 name: flaresolverr
 description: A Helm chart for FlareSolverr
 type: application
-version: 2.0.0
+version: 2.1.0
 
 maintainers:
   - name: somerandow
@@ -11,5 +11,5 @@ maintainers:
 appVersion: "v3.3.25"
 dependencies:
   - name: common
-    version: 0.4.2
-    repository: oci://ghcr.io/somerandow/charts
+    version: 0.5.5
+    repository: oci://registry.gitlab.com/wojoinc/helm-charts
