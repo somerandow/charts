@@ -22,7 +22,7 @@ jobs:
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
       - name: Install Helm
-        uses: azure/setup-helm@1a275c3b69536ee54be43f2070a358922e12c8d4
+        uses: azure/setup-helm@9d84ec575468d12b960f742294b0dbfa60823014
         with:
           version: v3.18.5
       - name: Add chart repos
