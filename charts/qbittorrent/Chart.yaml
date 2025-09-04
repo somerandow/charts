@@ -24,6 +24,7 @@ version: 2.0.4
 maintainers:
   - name: WojoInc
     email: wojoinc@pm.me
+# renovate: datasource=docker depName=ghcr.io/home-operations/qbittorrent
 appVersion: "5.0.4"
 dependencies:
   - name: common
