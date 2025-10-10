@@ -1,0 +1,10 @@
+apiVersion: v2
+name: omada-controller
+description: A Helm chart for Omada software controller
+type: application
+version: 0.1.0
+# renovate: datasource=docker depName=mbentley/omada-controller
+appVersion: "5.15"
+maintainers:
+  - name: somerandow
+    email: wojoinc@pm.me

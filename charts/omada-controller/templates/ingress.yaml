@@ -1,0 +1,35 @@
+{{- range $ingress, $spec := .Values.ingresses }}
+{{- if $spec.enabled }}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "omada-controller.resourceName" (dict "ctx" $ "extraResourceName" $ingress) }}
+{{- if $spec.additionalAnnotations }}
+  annotations: {{ $spec.additionalAnnotations | toYaml | nindent 4 }}
+{{- end }}
+  labels: {{ include "omada-controller.metadata.labels" $ | nindent 4 }}
+{{- if $spec.additionalLabels }}
+{{ $spec.additionalLabels | toYaml | nindent 4 }}
+{{- end }}
+spec:
+{{- if $spec.className }}
+  ingressClassName: {{ $spec.className }}
+{{- end }}
+  rules:
+    - host: {{ $spec.host | required "Must specify a host for Ingress" }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: omada-controller-{{ $ingress }}
+                port:
+                  name: {{ $ingress }}-https
+  tls:
+    - hosts:
+        - {{ $spec.host }}
+      secretName: {{ include "omada-controller.resourceName" (dict "ctx" $ "extraResourceName" $ingress) }}-tls
+{{- end }}
+{{- end }}

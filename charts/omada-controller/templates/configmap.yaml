@@ -1,0 +1,35 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "omada-controller.resourceName" (dict "ctx" . "extraResourceName" "config") }}
+data:
+{{- if not .Values.controller.rootless }}
+  PUID: {{ .Values.controller.puid | required "UID is required when not running rootless" | quote }}
+  PGID: {{ .Values.controller.pgid | required "GID is required when not running rootless" | quote }}
+{{- else }}
+  ROOTLESS: "true"
+{{- end }}
+  SHOW_SERVER_LOGS: {{ .Values.controller.logs.server | default true | quote }}
+  SHOW_MONGODB_LOGS: {{ .Values.controller.logs.db | default false | quote }}
+  SSL_CERT_NAME: "tls.crt"
+  SSL_KEY_NAME: "tls.key"
+  SKIP_USERMOD: "true"
+  TZ: {{ .Values.controller.timezone | default "Etc/UTC" | quote }}
+{{- /*  #  TODO: Allow using external mongo instance*/}}
+{{- /*  #  NO_MONGODB: "true"*/}}
+{{- /*  #  MONGO_EXTERNAL: "true"*/}}
+{{- /*  #  MONGODB_HOST: "mongodb.mongodb.svc:27017"*/}}
+{{- /*  #  EAP_MONGOD_URI: "mongodb://omada:${MONGODB_PASSWORD}@${MONGODB_HOST}/omada"*/}}
+  MANAGE_HTTP_PORT: "8088"
+  MANAGE_HTTPS_PORT: "8043"
+  PORTAL_HTTP_PORT: "8088"
+  PORTAL_HTTPS_PORT: "8843"
+  PORT_APP_DISCOVERY: "27001"
+  PORT_DISCOVERY: "29810"
+  PORT_MANAGER_V1: "29811"
+  PORT_ADOPT_V1: "29812"
+  PORT_UPGRADE_V1: "29813"
+  PORT_MANAGER_V2: "29814"
+  PORT_TRANSFER_V2: "29815"
+  PORT_RTTY: "29816"

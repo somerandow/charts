@@ -1,0 +1,54 @@
+image:
+  repository: docker.io/mbentley/omada-controller
+  tag: 5.15.24.19
+ingresses:
+  web-ui:
+    enabled: false
+    host: ""
+    className: ""
+    additionalLabels: {}
+    additionalAnnotations: {}
+  portal:
+    enabled: false
+    host: ""
+    className: ""
+    additionalLabels: {}
+    additionalAnnotations: {}
+controller:
+  # -- Whether the container should expect to run rootless. If true, pgid and puid are ignored
+  rootless: true
+  pgid: 508
+  puid: 508
+  timezone: Etc/UTC
+  logs:
+    server: true
+    db: false
+persistence:
+  data:
+    enabled: false
+    accessModes:
+      - ReadWriteOnce
+    storageClassName: ""
+    size: 1Gi
+  logs:
+    enabled: false
+    accessModes:
+      - ReadWriteOnce
+    storageClassName: ""
+    size: 1Gi
+services:
+  portal:
+    type: ClusterIP
+    loadBalancerRanges: []
+    additionalAnnotations: {}
+    additionalLabels: {}
+  webUI:
+    type: ClusterIP
+    loadBalancerRanges: []
+    additionalAnnotations: {}
+    additionalLabels: {}
+  controller:
+    type: LoadBalancer
+    loadBalancerRanges: []
+    additionalAnnotations: {}
+    additionalLabels: {}
