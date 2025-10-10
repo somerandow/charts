@@ -1,0 +1,14 @@
+{{- range $pvc, $spec := .Values.persistence -}}
+{{- if $spec.enabled }}
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ include "omada-controller.resourceName" (dict "ctx" $ "extraResourceName" $pvc) }}
+spec:
+  accessModes: {{ $spec.accessModes | toYaml | nindent 4 }}
+  resources:
+    requests:
+      storage: {{ $spec.size }}
+{{- end }}
+{{- end }}
