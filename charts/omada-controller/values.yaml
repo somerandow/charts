@@ -40,13 +40,13 @@ services:
   portal:
     type: ClusterIP
     loadBalancerRanges: []
-    additionalAnnotations: { }
-    additionalLabels: { }
+    additionalAnnotations: {}
+    additionalLabels: {}
   webUI:
     type: ClusterIP
     loadBalancerRanges: []
-    additionalAnnotations: { }
-    additionalLabels: { }
+    additionalAnnotations: {}
+    additionalLabels: {}
   controller:
     type: LoadBalancer
     loadBalancerRanges: []
