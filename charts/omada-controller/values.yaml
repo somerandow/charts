@@ -39,16 +39,13 @@ persistence:
 services:
   portal:
     type: ClusterIP
-    loadBalancerRanges: []
     additionalAnnotations: {}
     additionalLabels: {}
   webUI:
     type: ClusterIP
-    loadBalancerRanges: []
     additionalAnnotations: {}
     additionalLabels: {}
   controller:
     type: LoadBalancer
-    loadBalancerRanges: []
     additionalAnnotations: {}
     additionalLabels: {}

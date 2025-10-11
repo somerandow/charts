@@ -22,9 +22,6 @@ spec:
       targetPort: manage-https
       port: 8043
       protocol: TCP
-{{- if eq .Values.services.webUI.type "LoadBalancer" }}
-  loadBalancerSourceRanges: {{ empty .Values.services.webUI.loadBalancerRanges | ternary list (.Values.services.webUI.loadBalancerRanges | toYaml | nindent 4) }}
-{{- end }}
 ---
 apiVersion: v1
 kind: Service
@@ -45,9 +42,6 @@ spec:
       targetPort: portal-https
       port: 8843
       protocol: TCP
-{{- if eq .Values.services.portal.type "LoadBalancer" }}
-  loadBalancerSourceRanges: {{ empty .Values.services.portal.loadBalancerRanges | ternary list (.Values.services.portal.loadBalancerRanges | toYaml | nindent 4) }}
-{{- end }}
 ---
 apiVersion: v1
 kind: Service
@@ -65,9 +59,6 @@ spec:
   internalTrafficPolicy: Cluster
   selector: {{ include "omada-controller.metadata.selectorLabels" . | nindent 4 }}
   type: {{ .Values.services.controller.type }}
-{{- if eq .Values.services.controller.type "LoadBalancer" }}
-  loadBalancerSourceRanges: {{ empty .Values.services.controller.loadBalancerRanges | ternary list (.Values.services.controller.loadBalancerRanges | toYaml | nindent 4) }}
-{{- end }}
   ports:
     - name: manager-v1
       targetPort: manager-v1
@@ -110,9 +101,6 @@ spec:
   internalTrafficPolicy: Cluster
   selector: {{ include "omada-controller.metadata.selectorLabels" . | nindent 4 }}
   type: {{ .Values.services.controller.type }}
-{{- if eq .Values.services.controller.type "LoadBalancer" }}
-  loadBalancerSourceRanges: {{ empty .Values.services.controller.loadBalancerRanges | ternary list (.Values.services.controller.loadBalancerRanges | toYaml | nindent 4) }}
-{{- end }}
   ports:
     - name: app-discovery
       targetPort: app-discovery
