@@ -28,7 +28,7 @@ deployments:
           - name: TZ
             value: America/Chicago
         image:
-          repository: ghcr.io/onedr0p/qbittorrent
+          repository: ghcr.io/home-operations/qbittorrent
         resources:
           limits:
             cpu: "3"
