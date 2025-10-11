@@ -10,7 +10,6 @@ metadata:
   labels: {{ .Values.services.webUI.additionalLabels | toYaml | nindent 4 }}
 {{- end }}
 spec:
-  externalTrafficPolicy: Cluster
   internalTrafficPolicy: Cluster
   selector: {{ include "omada-controller.metadata.selectorLabels" . | nindent 4 }}
   type: {{ .Values.services.webUI.type }}
@@ -38,7 +37,6 @@ metadata:
   labels: {{ .Values.services.portal.additionalLabels | toYaml | nindent 4 }}
 {{- end }}
 spec:
-  externalTrafficPolicy: Cluster
   internalTrafficPolicy: Cluster
   selector: {{ include "omada-controller.metadata.selectorLabels" . | nindent 4 }}
   type: {{ .Values.services.portal.type }}
