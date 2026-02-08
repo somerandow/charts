@@ -1,0 +1,10 @@
+{{- if .Values.oauth.enabled }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "arr.resourceName" (dict "ctx" . "extraResourceName" "main") }}-oauth2-config
+  labels: {{ include "arr.metadata.labels" . | nindent 4 }}
+  annotations: {}
+data: {}
+{{- end }}
