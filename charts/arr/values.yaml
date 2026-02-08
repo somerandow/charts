@@ -13,30 +13,12 @@ image:
   # -- Sets the image tag. This should always be set as it will not fall back to chart appVersion
   tag: ""
 ingress:
-  main:
-    enabled: false
-    className: ""
-    host: ""
-    path: ""
-    pathType: ""
-    tls: false
-    forwardAuth:
-      enabled: false
-      allowedGroups: [ ]
-      endpoint: ""
-    annotations: {}
-  api:
-    enabled: false
-    className: ""
-    host: ""
-    path: ""
-    pathType: ""
-    tls: false
-    forwardAuth:
-      enabled: false
-      allowedGroups: [ ]
-      endpoint: ""
-    annotations: {}
+  enabled: false
+  className: ""
+  host: ""
+  path: ""
+  tls: false
+  annotations: {}
 persistence:
   config:
     enabled: false

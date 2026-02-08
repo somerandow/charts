@@ -48,7 +48,7 @@ metadata:
     traefik.ingress.kubernetes.io/router.middlewares: {{.Release.Namespace}}-{{.Release.Name}}-api-forward-auth-rd@kubernetescrd,{{.Release.Namespace}}-{{.Release.Name}}-api-forward-auth@kubernetescrd
     {{- end }}
     {{- if not (empty .Values.ingress.api.annotations) }}
-    {{- .Values.ingress.api.annotations | toYaml | nindent 4 }}
+    {{ .Values.ingress.api.annotations | toYaml | nindent 4 }}
     {{- end }}
   {{- end }}
 spec:

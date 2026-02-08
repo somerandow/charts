@@ -3,8 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "arr.resourceName" (dict "ctx" . "extraResourceName" "main") }}
-  labels:
-    {{- include "arr.metadata.labels" . | nindent 4 }}
+  labels: {{ include "arr.metadata.labels" . | nindent 4 }}
   annotations: {}
 spec:
   revisionHistoryLimit: 1
@@ -12,10 +11,10 @@ spec:
   strategy:
     type: Recreate
   selector:
-    matchLabels: {{- include "arr.metadata.selectorLabels" . | nindent 6 }}
+    matchLabels: {{ include "arr.metadata.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      labels: {{- include "arr.metadata.selectorLabels" . | nindent 8 }}
+      labels: {{ include "arr.metadata.selectorLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ .Values.serviceAccount.create | ternary
       (include "arr.resourceName" (dict "ctx" . "extraResourceName" "main")) ("default") }}
