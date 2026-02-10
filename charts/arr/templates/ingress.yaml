@@ -4,14 +4,14 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ include "arr.resourceName" (dict "ctx" . "extraResourceName" "main") }}
-  labels: {{- include "arr.metadata.labels" . | nindent 4 }}
+  labels: {{ include "arr.metadata.labels" . | nindent 4 }}
   {{- if or (not (empty .Values.ingress.main.annotations)) .Values.ingress.main.forwardAuth.enabled }}
   annotations:
     {{- if .Values.ingress.main.forwardAuth.enabled }}
     traefik.ingress.kubernetes.io/router.middlewares: {{.Release.Namespace}}-{{.Release.Name}}-forward-auth-rd@kubernetescrd,{{.Release.Namespace}}-{{.Release.Name}}-forward-auth@kubernetescrd
     {{- end }}
     {{- if not (empty .Values.ingress.main.annotations) }}
-    {{- .Values.ingress.main.annotations | toYaml | nindent 4 }}
+    {{ .Values.ingress.main.annotations | toYaml | nindent 4 }}
     {{- end }}
   {{- end }}
 spec:
@@ -35,7 +35,7 @@ spec:
         - {{ .Values.ingress.main.host }}
       secretName: {{ include "arr.resourceName" (dict "ctx" . "extraResourceName" "cert") }}
   {{- end }}
-{{- end -}}
+{{- end }}
 {{- if .Values.ingress.api.enabled }}
 ---
 apiVersion: networking.k8s.io/v1
@@ -48,7 +48,7 @@ metadata:
     traefik.ingress.kubernetes.io/router.middlewares: {{.Release.Namespace}}-{{.Release.Name}}-api-forward-auth-rd@kubernetescrd,{{.Release.Namespace}}-{{.Release.Name}}-api-forward-auth@kubernetescrd
     {{- end }}
     {{- if not (empty .Values.ingress.api.annotations) }}
-    {{- .Values.ingress.api.annotations | toYaml | nindent 4 }}
+    {{ .Values.ingress.api.annotations | toYaml | nindent 4 }}
     {{- end }}
   {{- end }}
 spec:

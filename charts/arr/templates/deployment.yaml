@@ -3,8 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "arr.resourceName" (dict "ctx" . "extraResourceName" "main") }}
-  labels:
-    {{- include "arr.metadata.labels" . | nindent 4 }}
+  labels: {{ include "arr.metadata.labels" . | nindent 4 }}
   annotations: {}
 spec:
   revisionHistoryLimit: 1
@@ -12,10 +11,10 @@ spec:
   strategy:
     type: Recreate
   selector:
-    matchLabels: {{- include "arr.metadata.selectorLabels" . | nindent 6 }}
+    matchLabels: {{ include "arr.metadata.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      labels: {{- include "arr.metadata.selectorLabels" . | nindent 8 }}
+      labels: {{ include "arr.metadata.selectorLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ .Values.serviceAccount.create | ternary
       (include "arr.resourceName" (dict "ctx" . "extraResourceName" "main")) ("default") }}
@@ -30,7 +29,7 @@ spec:
       enableServiceLinks: true
       containers:
         - name: main
-          image: {{ (.Values.image.tag | default .Chart.AppVersion) | printf "%s:%s" .Values.image.repository | quote }}
+          image: {{ (.Values.image.tag | default .Chart.Version) | printf "%s:%s" .Values.image.repository | quote }}
           imagePullPolicy: {{ .Values.image.pullPolicy | default "IfNotPresent" }}
           securityContext:
             allowPrivilegeEscalation: false

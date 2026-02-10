@@ -11,4 +11,4 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
-  selector: {{- include "arr.metadata.selectorLabels" . | nindent 4 }}
+  selector: {{ include "arr.metadata.selectorLabels" . | nindent 4 }}

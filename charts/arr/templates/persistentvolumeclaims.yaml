@@ -17,7 +17,7 @@ spec:
 {{- if not (empty .Values.persistence.config.className) }}
   storageClassName: {{ .Values.persistence.config.className }}
 {{- end }}
-{{- end -}}
+{{- end }}
 {{- if and .Values.persistence.media.enabled (empty .Values.persistence.media.existingClaim) }}
 ---
 kind: PersistentVolumeClaim
