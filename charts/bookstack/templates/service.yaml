@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bookstack
+  labels: {{ include "bookstack.metadata.labels" . | nindent 4 }}
+  {{- include "bookstack.metadata.annotations" (dict "ctx" .Values.service) | indent 2}}
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector: {{ include "bookstack.metadata.selectorLabels" . | nindent 4 }}

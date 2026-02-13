@@ -1,43 +1,29 @@
+# $schema: values.schema.json
 nameOverride: ""
 
-services:
-  main:
-    enabled: true
-    ports:
-      - name: http
-        port: 8080
-        target: http
+image:
+  # -- (string) the image repository
+  repository: "docker.io/solidnerd/bookstack"
+  # -- (string) the image version
+  # @default -- the chart's appVersion
+  tag: ""
 
-deployments:
-  main:
-    enabled: true
-    context:
-      fsGroup: 33
-      gid: 33
-      uid: 33
-    containers:
-      main:
-        image:
-          repository: docker.io/solidnerd/bookstack
-        resources:
-          limits:
-            cpu: 1500m
-            memory: 1532Mi
-          requests:
-            cpu: 200m
-            memory: 100Mi
-        ports:
-          http:
-            port: 8080
-        probes:
-          liveness:
-            enabled: true
-            port: 8080
-          readiness:
-            enabled: true
-            port: 8080
-          startup:
-            enabled: true
-            port: 8080
-mysql:
+ingress:
+  # -- Whether Ingress object should be included
   enabled: false
+  # @schema
+  # additionalProperties: true
+  # @schema
+  # -- (object) extra annotations to add to the ingress object
+  # @default -- {}
+  annotations: {}
+  className: ""
+  # -- the hostname for the Ingress
+  host: ""
+
+service:
+  # -- extra annotations to add to the service object
+  annotations:
+    foo: bar
+
+deployments: {}
