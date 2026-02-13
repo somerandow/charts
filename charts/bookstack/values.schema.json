@@ -1,0 +1,110 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "deployments": {
+      "additionalProperties": false,
+      "required": [],
+      "title": "deployments",
+      "type": "object"
+    },
+    "global": {
+      "description": "Global values are values that can be accessed from any chart or subchart by exactly the same name.",
+      "required": [],
+      "title": "global",
+      "type": "object"
+    },
+    "image": {
+      "additionalProperties": false,
+      "properties": {
+        "repository": {
+          "default": "docker.io/solidnerd/bookstack",
+          "description": "the image repository",
+          "title": "repository",
+          "type": "string"
+        },
+        "tag": {
+          "default": "the chart's appVersion",
+          "description": "the image version",
+          "title": "tag",
+          "type": "string"
+        }
+      },
+      "required": [],
+      "title": "image",
+      "type": "object"
+    },
+    "ingress": {
+      "additionalProperties": false,
+      "properties": {
+        "annotations": {
+          "additionalProperties": true,
+          "default": "{}",
+          "description": "extra annotations to add to the ingress object",
+          "required": [],
+          "title": "annotations",
+          "type": "object"
+        },
+        "className": {
+          "default": "",
+          "title": "className",
+          "type": "string"
+        },
+        "enabled": {
+          "default": "false",
+          "description": "Whether Ingress object should be included",
+          "required": [],
+          "title": "enabled"
+        },
+        "host": {
+          "default": "",
+          "description": "the hostname for the Ingress",
+          "required": [],
+          "title": "host"
+        }
+      },
+      "required": [
+        "className"
+      ],
+      "title": "ingress",
+      "type": "object"
+    },
+    "nameOverride": {
+      "default": "",
+      "description": "$schema: values.schema.json",
+      "title": "nameOverride",
+      "type": "string"
+    },
+    "service": {
+      "additionalProperties": false,
+      "properties": {
+        "annotations": {
+          "additionalProperties": false,
+          "description": "extra annotations to add to the service object",
+          "properties": {
+            "foo": {
+              "default": "bar",
+              "title": "foo",
+              "type": "string"
+            }
+          },
+          "required": [
+            "foo"
+          ],
+          "title": "annotations"
+        }
+      },
+      "required": [],
+      "title": "service",
+      "type": "object"
+    }
+  },
+  "required": [
+    "nameOverride",
+    "image",
+    "ingress",
+    "service",
+    "deployments"
+  ],
+  "type": "object"
+}
