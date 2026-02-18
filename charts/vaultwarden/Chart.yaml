@@ -2,9 +2,9 @@ apiVersion: v2
 name: vaultwarden
 description: A Helm chart for deploying vaultwarden
 type: application
-version: 1.7.1
+version: 1.7.2
 # renovate: datasource=github-releases depName=dani-garcia/vaultwarden
-appVersion: "1.35.2"
+appVersion: "1.35.3"
 maintainers:
   - name: WojoInc
     email: wojoinc@pm.me
