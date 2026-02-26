@@ -2,7 +2,7 @@ apiVersion: v2
 name: vaultwarden
 description: A Helm chart for deploying vaultwarden
 type: application
-version: 1.7.3
+version: 2.0.0
 # renovate: datasource=github-releases depName=dani-garcia/vaultwarden
 appVersion: "1.35.4"
 maintainers:
@@ -13,6 +13,6 @@ dependencies:
     version: 0.4.2
     repository: oci://registry.gitlab.com/wojoinc/helm-charts
   - name: postgresql
-    version: 13.4.6
+    version: 18.5.1
     condition: postgresql.enabled
     repository: oci://registry-1.docker.io/bitnamicharts
