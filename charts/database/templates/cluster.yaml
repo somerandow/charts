@@ -1,0 +1,27 @@
+{{- if eq .Values.mode "cluster" }}
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: {{ include "util.resourceName" (dict "ctx" $ "extraResourceName" .Values.instanceName) }}
+spec:
+  bootstrap:
+    initdb:
+      database: {{ .Values.dbName | required "Must specify a database name when deploying in \"cluster\" mode!"}}
+      secret:
+        name: {{ .Values.appUser.credentials.secretName | required "Must set `appUser.credentials.secretName` to specify a secret for storing credentials!"}}
+  monitoring:
+    enablePodMonitor: false
+  instances: 3
+  storage:
+    size: 1Gi
+  serviceAccountTemplate:
+    metadata:
+      name: {{ .Values.serviceAccountName | required "`serviceAccountName` must not be null!"}}
+  postgresql:
+    parameters:
+      pgaudit.log: "all, -misc"
+      pgaudit.log_catalog: "off"
+      pgaudit.log_parameter: "on"
+      pgaudit.log_relation: "on"
+{{- end }}

@@ -1,0 +1,18 @@
+global:
+  nameOverride: ""
+mode: cluster
+instanceName: db
+dbName: "bar"
+appUser:
+  credentials:
+    secretName: "my-secret"
+    useExisting: false
+vault:
+  enabled: true
+  role: "homelab-default"
+  audiences:
+    - "vault.wojoinc.xyz"
+  mount: homelab
+  connection:
+    name: default
+    namespace: vault-secrets-operator

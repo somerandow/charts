@@ -1,0 +1,34 @@
+{{- if not .Values.appUser.credentials.useExisting }}
+{{- if not .Values.vault.enabled }}
+{{ fail "`vault.enabled` must be true when not using an existing secret" }}
+{{- end }}
+{{/*
+Check the condition on audiences here instead as `required` does not consider empty==null
+which is what we want here. More readable than a long ternary
+  */}}
+{{- if empty .Values.vault.audiences }}
+{{ fail "`vault.audiences` must be a non-empty list when `vault.enabled`==true" }}
+{{- end }}
+{{/*
+TODO: Review whether its better to place all required checks here to keep the actual YAML more readable
+*/}}
+---
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultAuth
+metadata:
+  name: {{ include "util.resourceName" (dict "ctx" $ "extraResourceName" .Values.instanceName) }}
+spec:
+  kubernetes:
+    audiences: {{ .Values.vault.audiences | toYaml | nindent 6 }}
+    role: {{ .Values.vault.role | required "`vault.role` must be provided when `vault.enabled`==true" }}
+    serviceAccount: {{ .Values.serviceAccountName }}
+    tokenExpirationSeconds: {{ .Values.vault.ttl | default 600 }}
+  method: kubernetes
+  mount: {{ .Values.vault.mount | required "`vault.mount` must be provided when `vault.enabled`==true" }}
+{{- with .Values.vault.connection }}
+{{- if or (empty .name) (empty .namespace) }}
+{{ fail "`vault.connection.name` and `vault.connection.namespace` must both be specified when `vault.enabled`==true" }}
+{{- end }}
+  vaultConnectionRef: {{ printf "%s/%s" .namespace .name }}
+{{- end }}
+{{- end }}
