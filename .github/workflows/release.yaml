@@ -36,7 +36,7 @@ jobs:
             cd ${{ github.workspace }}/${dir}; echo "*****${dir}*****"; helm dependency build
           done
       - name: Run chart-releaser
-        uses: helm/chart-releaser-action@3e001cb8c68933439c7e721650f20a07a1a5c61e
+        uses: helm/chart-releaser-action@c5a1c1b527a31d92ad837d7723dd67f0b8b62f15
         with:
           version: v1.8.1
           skip_upload: true
